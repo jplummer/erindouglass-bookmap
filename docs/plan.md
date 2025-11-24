@@ -1,12 +1,13 @@
 # Implementation Plan: Book Location Map
 
-## Next Steps (Optional Enhancements)
+## Next Steps
 
-1. Add review links from actual CS Monitor URLs
-2. Add book cover image URLs
-3. Refine locations to be more specific where needed
-4. Deploy to Squarespace
-5. Consider future enhancements (see "Future Enhancements" section below)
+1. Add review links from actual CS Monitor URLs (if available)
+2. Add book cover image URLs (if available)
+3. Deploy to Squarespace and verify it works
+4. Refine locations to be more specific where needed (optional)
+
+**Note:** The project is functional as-is. These are optional improvements.
 
 ---
 
@@ -35,7 +36,8 @@ erindouglass-bookmap/
 ├── docs/                   # Plan and how-to
 │   └── archive/            # Old planning documents
 ├── README.md               # Setup, usage, and user guide (combined)
-└── SQUARESPACE_GUIDE.md    # Squarespace embedding instructions
+└── docs/
+    └── squarespace_guide.md  # Squarespace embedding instructions
 ```
 
 **Note:** HTML template and CSS are embedded directly in `build.py` and generated inline in the output HTML file (self-contained approach).
@@ -71,40 +73,51 @@ erindouglass-bookmap/
 
 ---
 
-## Future Enhancements (Post-MVP)
+## Future Enhancements (If Needed)
 
-1. **Custom Markers**: Use book covers as marker icons
-2. **Filtering**: Filter by genre, year, author
-3. **Search**: Search books by title/author
-4. **Statistics**: Count books by country/region
-5. **Multiple Map Styles**: Different tile providers
-6. **Export**: Export to image or PDF
-7. **Auto-deploy**: GitHub Actions to auto-build on YAML changes
+**Note:** Keep it simple. Only add these if there's a real need:
+
+1. **Custom Markers**: Use book covers as marker icons (nice-to-have, adds complexity)
+2. **Filtering/Search**: Only if managing many books becomes difficult
+3. **Auto-deploy**: Only if manual build becomes a burden
+
+**Philosophy:** This is a simple tool. Avoid feature creep. If it works for the use case, leave it alone.
 
 ---
 
 ## Implementation Status
 
-✅ **COMPLETED** - All phases implemented and tested
+✅ **FUNCTIONAL** - Core functionality implemented and working
 
-### Actual Implementation Notes:
-- Used self-contained HTML output (single file)
-- Format documentation added directly to books.yaml (top and bottom)
-- Combined README.md and USER_GUIDE.md into single comprehensive README
-- Removed empty folders (templates/, static/) for cleaner structure
-- 36 real books from CS Monitor reviews added to books.yaml
-- Build script tested and working correctly
+### What's Actually Done:
+- Self-contained HTML output (single file)
+- Format documentation in books.yaml (top and bottom)
+- Combined README with user guide
+- 36 books added to books.yaml (locations geocoded, but covers/reviews not yet added)
+- Build script works: validates YAML, geocodes locations, generates map
+- Basic YAML validation added (checks structure, required fields, data types)
+
+### What's Not Fully Tested:
+- Squarespace embedding (instructions provided, but not verified in production)
+- Edge cases in geocoding (some locations may need manual coordinates)
+- All 36 books verified for accuracy
+
+### Known Limitations:
+- No book covers or review links added yet (fields supported, just not populated)
+- Some locations are generic (e.g., "United States" instead of specific cities)
+- Geocoding may fail for ambiguous location names
 
 ---
 
 ## Success Criteria
 
 - [x] User can add a book by editing YAML file
-- [x] Build script runs without errors
-- [x] Generated map displays all books
+- [x] Build script runs without errors (with valid YAML)
+- [x] Generated map displays books correctly
 - [x] Clustering works for duplicate locations
 - [x] Popups show book information correctly
-- [x] Map embeds successfully in Squarespace (instructions provided)
+- [x] YAML validation catches common errors
+- [ ] Map embeds successfully in Squarespace (instructions provided, not yet verified)
 - [x] Documentation is clear and complete
 - [x] Format documentation included in books.yaml for easy reference
 
@@ -163,10 +176,11 @@ build.py
 - If location has lat/lng, skip geocoding
 
 #### 2.3 Error Handling ✅
-- Invalid YAML syntax
-- Geocoding failures (location not found)
-- Missing required fields
-- Network errors during geocoding
+- Invalid YAML syntax (catches and exits)
+- YAML structure validation (added in latest version)
+- Geocoding failures (location not found - warns but continues)
+- Missing required fields (validated before processing)
+- Network errors during geocoding (catches and continues)
 
 ---
 
@@ -217,11 +231,12 @@ Author Name (if available)
 ### Phase 5: Build Process & Output ✅
 
 #### 5.1 Build Script Features ✅
-- Validate YAML syntax
+- Validate YAML syntax and structure (added recently)
 - Geocode missing coordinates
 - Generate JSON data
 - Render HTML template
 - Create self-contained HTML output
+- Show summary statistics
 
 #### 5.2 Output Format ✅
 **Implemented: Self-contained HTML (Option A)**
@@ -273,25 +288,21 @@ Author Name (if available)
 
 ---
 
-## Testing Plan ✅
+## Testing Status
 
-### Unit Tests ✅
-- YAML parsing
-- Geocoding with cache
-- JSON generation
-- HTML template rendering
+### What's Been Tested:
+- YAML parsing (works with current books.yaml)
+- Basic validation (catches missing fields, invalid types)
+- Geocoding with cache (works, locations cached)
+- Full build process (generates HTML successfully)
+- Map displays correctly in browser
+- Clustering works (tested with multiple books in same cities)
 
-### Integration Tests ✅
-- Full build process with sample data
-- Verify clustering works with duplicate locations
-- Test popup display
-- Verify map loads correctly
-
-### User Testing ✅
-- User adds a book to YAML
-- Run build script
-- Verify output looks correct
-- Test embedding in Squarespace
+### What Hasn't Been Fully Tested:
+- Squarespace embedding (instructions provided, not verified)
+- Edge cases (very long titles, special characters, etc.)
+- All 36 books verified for location accuracy
+- Error handling for all failure modes
 
 ---
 

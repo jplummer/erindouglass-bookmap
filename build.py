@@ -8,6 +8,8 @@ import yaml
 import json
 import os
 import time
+import sys
+import re
 from pathlib import Path
 from geopy.geocoders import Nominatim
 from geopy.exc import GeocoderTimedOut, GeocoderServiceError
@@ -21,6 +23,106 @@ CSS_FILE = "static/css/map.css"
 
 # Geocoding rate limit (Nominatim requires max 1 request per second)
 GEOCODE_DELAY = 1.1  # Slightly more than 1 second to be safe
+
+
+def validate_yaml(data):
+    """
+    Validate YAML structure and data.
+    Returns (is_valid, errors, warnings)
+    """
+    errors = []
+    warnings = []
+    
+    if not isinstance(data, dict):
+        errors.append("YAML root must be a dictionary")
+        return False, errors, warnings
+    
+    if 'books' not in data:
+        errors.append("Missing required 'books' key in YAML")
+        return False, errors, warnings
+    
+    books = data['books']
+    if not isinstance(books, list):
+        errors.append("'books' must be a list")
+        return False, errors, warnings
+    
+    if len(books) == 0:
+        warnings.append("No books found in YAML file")
+        return True, errors, warnings
+    
+    # Validate each book
+    for i, book in enumerate(books):
+        if not isinstance(book, dict):
+            errors.append(f"Book {i+1}: Must be a dictionary")
+            continue
+        
+        # Required: title
+        if 'title' not in book:
+            errors.append(f"Book {i+1}: Missing required field 'title'")
+        elif not isinstance(book['title'], str) or not book['title'].strip():
+            errors.append(f"Book {i+1}: 'title' must be a non-empty string")
+        
+        # Required: locations
+        if 'locations' not in book:
+            errors.append(f"Book {i+1} ('{book.get('title', 'Unknown')}'): Missing required field 'locations'")
+        elif not isinstance(book['locations'], list):
+            errors.append(f"Book {i+1} ('{book.get('title', 'Unknown')}'): 'locations' must be a list")
+        elif len(book['locations']) == 0:
+            errors.append(f"Book {i+1} ('{book.get('title', 'Unknown')}'): 'locations' list cannot be empty")
+        else:
+            # Validate each location
+            for j, loc in enumerate(book['locations']):
+                if not isinstance(loc, dict):
+                    errors.append(f"Book {i+1}, location {j+1}: Must be a dictionary")
+                    continue
+                
+                if 'name' not in loc:
+                    errors.append(f"Book {i+1}, location {j+1}: Missing required field 'name'")
+                elif not isinstance(loc['name'], str) or not loc['name'].strip():
+                    errors.append(f"Book {i+1}, location {j+1}: 'name' must be a non-empty string")
+                
+                # Validate coordinates if provided
+                if 'lat' in loc:
+                    try:
+                        lat = float(loc['lat'])
+                        if lat < -90 or lat > 90:
+                            errors.append(f"Book {i+1}, location {j+1}: 'lat' must be between -90 and 90")
+                    except (ValueError, TypeError):
+                        errors.append(f"Book {i+1}, location {j+1}: 'lat' must be a number")
+                
+                if 'lng' in loc:
+                    try:
+                        lng = float(loc['lng'])
+                        if lng < -180 or lng > 180:
+                            errors.append(f"Book {i+1}, location {j+1}: 'lng' must be between -180 and 180")
+                    except (ValueError, TypeError):
+                        errors.append(f"Book {i+1}, location {j+1}: 'lng' must be a number")
+        
+        # Optional fields validation
+        if 'author' in book and not isinstance(book['author'], str):
+            warnings.append(f"Book {i+1} ('{book.get('title', 'Unknown')}'): 'author' should be a string")
+        
+        if 'cover' in book:
+            if not isinstance(book['cover'], str):
+                warnings.append(f"Book {i+1} ('{book.get('title', 'Unknown')}'): 'cover' should be a string")
+            elif book['cover'] and not re.match(r'^https?://', book['cover']):
+                warnings.append(f"Book {i+1} ('{book.get('title', 'Unknown')}'): 'cover' should be a full URL (starting with http:// or https://)")
+        
+        if 'review' in book:
+            if not isinstance(book['review'], str):
+                warnings.append(f"Book {i+1} ('{book.get('title', 'Unknown')}'): 'review' should be a string")
+            elif book['review'] and not re.match(r'^https?://', book['review']):
+                warnings.append(f"Book {i+1} ('{book.get('title', 'Unknown')}'): 'review' should be a full URL (starting with http:// or https://)")
+        
+        if 'year' in book:
+            if not isinstance(book['year'], (int, str)):
+                warnings.append(f"Book {i+1} ('{book.get('title', 'Unknown')}'): 'year' should be a number or string")
+        
+        if 'genre' in book and not isinstance(book['genre'], str):
+            warnings.append(f"Book {i+1} ('{book.get('title', 'Unknown')}'): 'genre' should be a string")
+    
+    is_valid = len(errors) == 0
+    return is_valid, errors, warnings
 
 
 def load_cache():
@@ -329,12 +431,37 @@ def main():
     
     # Load books data
     print(f"Loading {INPUT_FILE}...")
-    with open(INPUT_FILE, 'r') as f:
-        data = yaml.safe_load(f)
+    try:
+        with open(INPUT_FILE, 'r') as f:
+            data = yaml.safe_load(f)
+    except yaml.YAMLError as e:
+        print(f"❌ Error: Invalid YAML syntax in {INPUT_FILE}")
+        print(f"   {e}")
+        sys.exit(1)
+    except FileNotFoundError:
+        print(f"❌ Error: File not found: {INPUT_FILE}")
+        sys.exit(1)
     
-    if 'books' not in data:
-        print("Error: 'books' key not found in YAML file")
-        return
+    # Validate YAML structure and data
+    print("Validating YAML structure...")
+    is_valid, errors, warnings = validate_yaml(data)
+    
+    if warnings:
+        print(f"\n⚠️  Warnings ({len(warnings)}):")
+        for warning in warnings:
+            print(f"   - {warning}")
+    
+    if not is_valid:
+        print(f"\n❌ Validation failed ({len(errors)} errors):")
+        for error in errors:
+            print(f"   - {error}")
+        print("\nPlease fix the errors above and try again.")
+        sys.exit(1)
+    
+    if is_valid and not warnings:
+        print("✓ YAML validation passed")
+    elif is_valid:
+        print(f"✓ YAML validation passed (with {len(warnings)} warnings)")
     
     books = data['books']
     print(f"Found {len(books)} books")
@@ -366,6 +493,18 @@ def main():
     
     print(f"✓ Generated {output_file}")
     print(f"✓ Map contains {len(processed_books)} books")
+    
+    # Summary statistics
+    total_locations = sum(len(book['locations']) for book in processed_books)
+    books_with_covers = sum(1 for book in processed_books if 'cover' in book and book['cover'])
+    books_with_reviews = sum(1 for book in processed_books if 'review' in book and book['review'])
+    
+    print(f"\n📊 Summary:")
+    print(f"   - Books: {len(processed_books)}")
+    print(f"   - Total locations: {total_locations}")
+    print(f"   - Books with covers: {books_with_covers}")
+    print(f"   - Books with reviews: {books_with_reviews}")
+    
     print("\nNext steps:")
     print(f"  1. Open {output_file} in a browser to preview")
     print("  2. Upload the output folder to your hosting/Squarespace")

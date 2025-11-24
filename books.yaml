@@ -1,57 +1,17 @@
 # Book Locations Map - Input File
-# Add your books with their locations, covers, and review links
 #
-# ============================================================================
-# FORMAT DOCUMENTATION
-# ============================================================================
+# TODO
+# - Verify/correct book titles as needed
+# - Add review links (optional)
+# - Add cover image URLs (optional)
+# - Refine locations to be more specific (if possible)
 #
-# BASIC FORMAT:
-#   Each book needs at least a title and one location:
+# QUICK REFERENCE
+# Required: title, locations (with name)
+# Optional: author, cover, review, year, genre
 #
-#   - title: "Book Title"
-#     locations:
-#       - name: "City, Country"
-#
-# COMPLETE EXAMPLE:
-#   - title: "The Paris Wife"
-#     author: "Paula McLain"
-#     locations:
-#       - name: "Paris, France"
-#       - name: "Brest, France"  # Multiple locations allowed
-#     cover: "https://example.com/covers/paris-wife.jpg"
-#     review: "https://example.com/reviews/paris-wife"
-#     year: 2011
-#     genre: "Historical Fiction"
-#
-# REQUIRED FIELDS:
-#   - title: The book's title (required)
-#   - locations: At least one location (required)
-#     - name: Location name, e.g. "Paris, France" (required)
-#     - lat/lng: Optional coordinates if you know them
-#
-# OPTIONAL FIELDS:
-#   - author: Author's name
-#   - cover: URL to book cover image (full http:// or https:// URL)
-#   - review: URL to your review (full http:// or https:// URL)
-#   - year: Publication year
-#   - genre: Book genre
-#
-# TIPS:
-#   - Location names: Be specific! "Paris, France" is better than "Paris"
-#   - Multiple locations: List all locations where the book is set
-#   - Coordinates: If you know lat/lng, include them to skip geocoding
-#   - Covers: Use publicly accessible image URLs, recommended 200-300px wide
-#   - Review links: Full URLs, will open in new tab when clicked
-#
-# AFTER EDITING:
-#   1. Save this file
-#   2. Run: python3 build.py
-#   3. Preview: open output/index.html
-#   4. Upload output/index.html to your website
-#
-# ============================================================================
-# See bottom of file for quick copy-paste examples and troubleshooting
-# ============================================================================
+# After editing: Run `python3 build.py` to generate the map
+# See bottom of file for detailed format documentation and examples
 
 books:
   # "Super Natural" by Alex Riley - explores species in extreme climates
@@ -313,13 +273,32 @@ books:
       - name: "Romania"
     genre: "Historical Fiction"
 
-# TODO:
-# - Verify/correct book titles as needed
-# - Add review links (optional)
-# - Add cover image URLs (optional)
-# - Refine locations to be more specific (if possible)
 # ============================================================================
-# FORMAT REFERENCE (Quick Copy-Paste Examples)
+# DETAILED FORMAT DOCUMENTATION
+# ============================================================================
+#
+# BASIC FORMAT:
+#   Each book needs at least a title and one location:
+#
+#   - title: "Book Title"
+#     locations:
+#       - name: "City, Country"
+#
+# REQUIRED FIELDS:
+#   - title: The book's title (required, must be non-empty string)
+#   - locations: At least one location (required, must be a list)
+#     - name: Location name, e.g. "Paris, France" (required)
+#     - lat/lng: Optional coordinates if you know them (numbers between valid ranges)
+#
+# OPTIONAL FIELDS:
+#   - author: Author's name (string)
+#   - cover: URL to book cover image (full http:// or https:// URL)
+#   - review: URL to your review (full http:// or https:// URL)
+#   - year: Publication year (number or string)
+#   - genre: Book genre (string)
+#
+# ============================================================================
+# EXAMPLES
 # ============================================================================
 #
 # MINIMAL ENTRY (title + one location):
@@ -339,7 +318,7 @@ books:
 #       - name: "City 1, Country"
 #       - name: "City 2, Country"
 #
-# WITH COORDINATES (skips geocoding/lets you put a pin specifically):
+# WITH COORDINATES (skips geocoding):
 #   - title: "Book Title"
 #     locations:
 #       - name: "Paris, France"
@@ -347,14 +326,43 @@ books:
 #         lng: 2.3522
 #
 # COMPLETE ENTRY:
-#   - title: "Book Title"
-#     author: "Author Name"
+#   - title: "The Paris Wife"
+#     author: "Paula McLain"
 #     locations:
-#       - name: "City, Country"
-#     cover: "https://example.com/cover.jpg"
-#     review: "https://example.com/review"
-#     year: 2023
-#     genre: "Fiction"
+#       - name: "Paris, France"
+#       - name: "Brest, France"
+#     cover: "https://example.com/covers/paris-wife.jpg"
+#     review: "https://example.com/reviews/paris-wife"
+#     year: 2011
+#     genre: "Historical Fiction"
+#
+# ============================================================================
+# TIPS
+# ============================================================================
+#
+# Location Names:
+#   - Be specific: "Paris, France" is better than just "Paris"
+#   - Include country for clarity
+#   - Use standard place names for best geocoding results
+#
+# Multiple Locations:
+#   - List all locations where the book is set
+#   - Each location will get its own marker on the map
+#
+# Coordinates:
+#   - If you know lat/lng, include them to skip geocoding
+#   - Latitude: -90 to 90
+#   - Longitude: -180 to 180
+#
+# Covers:
+#   - Use publicly accessible image URLs
+#   - Recommended size: 200-300px wide
+#   - Must start with http:// or https://
+#
+# Review Links:
+#   - Full URLs to your review pages
+#   - Links open in a new tab when clicked
+#   - Must start with http:// or https://
 #
 # ============================================================================
 # TROUBLESHOOTING
@@ -368,7 +376,23 @@ books:
 # Multiple books in same city?
 #   - No problem! The map automatically clusters them together
 #   - Click a cluster to expand and see all books
+#   - Zoom in to separate clustered markers
 #
 # Build taking too long?
 #   - First build geocodes all locations (1 per second rate limit)
 #   - Subsequent builds use cached coordinates and are much faster
+#
+# Validation errors?
+#   - Check that required fields (title, locations) are present
+#   - Ensure locations is a list with at least one entry
+#   - Verify location names are non-empty strings
+#   - Check that coordinates (if provided) are valid numbers in correct ranges
+#
+# ============================================================================
+# AFTER EDITING
+# ============================================================================
+#
+# 1. Save this file
+# 2. Run: python3 build.py
+# 3. Preview: open output/index.html
+# 4. Upload output/index.html to your website
