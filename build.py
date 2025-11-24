@@ -237,12 +237,13 @@ def process_books(books_data, cache):
 def generate_map_js(books_data):
     """Generate JavaScript code to initialize the map"""
     js = """
-    // Initialize map
-    const map = L.map('map').setView([20, 0], 2);
+    // Initialize map (temporary view, will be adjusted to fit markers)
+    const map = L.map('map');
     
-    // Add OpenStreetMap tiles
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    // Add CartoDB Positron tiles (light, minimal style)
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
         maxZoom: 19
     }).addTo(map);
     
@@ -258,8 +259,6 @@ def generate_map_js(books_data):
     const booksData = """ + json.dumps(books_data, indent=4) + """;
     
     // Create markers for each book location
-    const bounds = [];
-    
     booksData.forEach(book => {
         book.locations.forEach(location => {
             // Create popup content
@@ -295,18 +294,18 @@ def generate_map_js(books_data):
             const marker = L.marker([location.lat, location.lng]);
             marker.bindPopup(popupContent);
             markers.addLayer(marker);
-            
-            bounds.push([location.lat, location.lng]);
         });
     });
     
     // Add markers to map
     map.addLayer(markers);
     
-    // Fit map to show all markers
-    if (bounds.length > 0) {
-        map.fitBounds(bounds, { padding: [50, 50] });
-    }
+    // Fit map to show all markers (use cluster group bounds for accuracy)
+    setTimeout(() => {
+        if (markers.getBounds().isValid()) {
+            map.fitBounds(markers.getBounds(), { padding: [50, 50], maxZoom: 10 });
+        }
+    }, 100);
     """
     return js
 
