@@ -1,0 +1,374 @@
+# Book Locations Map - Input File
+# Books reviewed by Erin Douglass for The Christian Science Monitor
+#
+# ============================================================================
+# FORMAT DOCUMENTATION
+# ============================================================================
+#
+# BASIC FORMAT:
+#   Each book needs at least a title and one location:
+#
+#   - title: "Book Title"
+#     locations:
+#       - name: "City, Country"
+#
+# COMPLETE EXAMPLE:
+#   - title: "The Paris Wife"
+#     author: "Paula McLain"
+#     locations:
+#       - name: "Paris, France"
+#       - name: "Brest, France"  # Multiple locations allowed
+#     cover: "https://example.com/covers/paris-wife.jpg"
+#     review: "https://example.com/reviews/paris-wife"
+#     year: 2011
+#     genre: "Historical Fiction"
+#
+# REQUIRED FIELDS:
+#   - title: The book's title (required)
+#   - locations: At least one location (required)
+#     - name: Location name, e.g. "Paris, France" (required)
+#     - lat/lng: Optional coordinates if you know them
+#
+# OPTIONAL FIELDS:
+#   - author: Author's name
+#   - cover: URL to book cover image (full http:// or https:// URL)
+#   - review: URL to your review (full http:// or https:// URL)
+#   - year: Publication year
+#   - genre: Book genre
+#
+# TIPS:
+#   - Location names: Be specific! "Paris, France" is better than "Paris"
+#   - Multiple locations: List all locations where the book is set
+#   - Coordinates: If you know lat/lng, include them to skip geocoding
+#   - Covers: Use publicly accessible image URLs, recommended 200-300px wide
+#   - Review links: Full URLs, will open in new tab when clicked
+#
+# AFTER EDITING:
+#   1. Save this file
+#   2. Run: python3 build.py
+#   3. Preview: open output/index.html
+#   4. Upload output/index.html to your website
+#
+# ============================================================================
+# See bottom of file for quick copy-paste examples and troubleshooting
+# ============================================================================
+
+books:
+  # "Super Natural" by Alex Riley - explores species in extreme climates
+  # Note: This book covers multiple extreme locations - may need to add specific locations
+  - title: "Super Natural"
+    author: "Alex Riley"
+    locations:
+      - name: "Antarctica"
+      - name: "Sahara Desert"
+    genre: "Science"
+
+  # "Monopoly X" by Philip E. Orbanes - POW camps in Germany
+  - title: "Monopoly X"
+    author: "Philip E. Orbanes"
+    locations:
+      - name: "Germany"
+    genre: "History"
+
+  # Maria Reva novel - Ukraine war, matchmaking, mollusks
+  - title: "Good Citizens Need No Leaders"
+    author: "Maria Reva"
+    locations:
+      - name: "Ukraine"
+    genre: "Fiction"
+
+  # Rose Valland biography by Michelle Young - Nazi art thefts in occupied France
+  - title: "The Art Thief"
+    author: "Michelle Young"
+    locations:
+      - name: "Paris, France"
+    genre: "Biography"
+
+  # "The Dream Hotel" by Laila Lalami - privacy concerns, big tech
+  - title: "The Dream Hotel"
+    author: "Laila Lalami"
+    locations:
+      - name: "United States"
+    genre: "Fiction"
+
+  # Benjamin Franklin biography by Richard Munson
+  - title: "The Ingenious Mr. Pyke"
+    author: "Richard Munson"
+    locations:
+      - name: "Philadelphia, Pennsylvania, USA"
+    genre: "Biography"
+
+  # "Polostan" by Neal Stephenson - Russian American, Ukraine, Montana, 1920s-30s
+  - title: "Polostan"
+    author: "Neal Stephenson"
+    locations:
+      - name: "Ukraine"
+      - name: "Montana, USA"
+    genre: "Historical Fiction"
+
+  # "Frederick Douglass: A Novel"
+  - title: "Frederick Douglass: A Novel"
+    author: "Frederick Douglass"
+    locations:
+      - name: "United States"
+    genre: "Historical Fiction"
+
+  # Ulysses S. Grant novel by Jon Clinch
+  - title: "The General and Julia"
+    author: "Jon Clinch"
+    locations:
+      - name: "United States"
+    genre: "Historical Fiction"
+
+  # "The Heaven & Earth Grocery Store" by James McBride - Pennsylvania
+  - title: "The Heaven & Earth Grocery Store"
+    author: "James McBride"
+    locations:
+      - name: "Pennsylvania, USA"
+    genre: "Fiction"
+
+  # "Daughter of the Dragon" - Anna May Wong biography
+  - title: "Daughter of the Dragon"
+    author: "Yunte Huang"
+    locations:
+      - name: "Los Angeles, California, USA"
+      - name: "Hollywood, California, USA"
+    genre: "Biography"
+
+  # "Parallel Lines" by Ruth Marks Eglash - Jerusalem
+  - title: "Parallel Lines"
+    author: "Ruth Marks Eglash"
+    locations:
+      - name: "Jerusalem, Israel"
+    genre: "Young Adult Fiction"
+
+  # "The Last Dance" by Mark Billingham - UK mystery
+  - title: "The Last Dance"
+    author: "Mark Billingham"
+    locations:
+      - name: "United Kingdom"
+    genre: "Mystery"
+
+  # "The Covenant of Water" by Abraham Verghese - Kerala, India
+  - title: "The Covenant of Water"
+    author: "Abraham Verghese"
+    locations:
+      - name: "Kerala, India"
+    genre: "Fiction"
+
+  # "Birnam Wood" by Eleanor Catton - New Zealand
+  - title: "Birnam Wood"
+    author: "Eleanor Catton"
+    locations:
+      - name: "New Zealand"
+    genre: "Fiction"
+
+  # "Getting out of Saigon" by Ralph White - Vietnam
+  - title: "Getting out of Saigon"
+    author: "Ralph White"
+    locations:
+      - name: "Ho Chi Minh City, Vietnam"
+    genre: "Memoir"
+
+  # "Cold People" by Tom Rob Smith - Antarctica
+  - title: "Cold People"
+    author: "Tom Rob Smith"
+    locations:
+      - name: "Antarctica"
+    genre: "Science Fiction"
+
+  # "Roses, in the Mouth of a Lion" by Bushra Rehman - Pakistani American, Queens
+  - title: "Roses, in the Mouth of a Lion"
+    author: "Bushra Rehman"
+    locations:
+      - name: "Queens, New York, USA"
+    genre: "Fiction"
+
+  # "Master Slave Husband Wife" by Ilyon Woo - Georgia, 1840s
+  - title: "Master Slave Husband Wife"
+    author: "Ilyon Woo"
+    locations:
+      - name: "Georgia, USA"
+    genre: "History"
+
+  # "The Consequences" by Manuel Muñoz - border crossings, California
+  - title: "The Consequences"
+    author: "Manuel Muñoz"
+    locations:
+      - name: "California, USA"
+      - name: "Mexico"
+    genre: "Short Stories"
+
+  # "Blackwater Falls" by Ausma Zehanat Khan - Colorado mystery
+  - title: "Blackwater Falls"
+    author: "Ausma Zehanat Khan"
+    locations:
+      - name: "Colorado, USA"
+    genre: "Mystery"
+
+  # "Lessons" by Ian McEwan
+  - title: "Lessons"
+    author: "Ian McEwan"
+    locations:
+      - name: "United Kingdom"
+    genre: "Fiction"
+
+  # "The Wall" by Marlen Haushofer - Bavarian forest
+  - title: "The Wall"
+    author: "Marlen Haushofer"
+    locations:
+      - name: "Bavaria, Germany"
+    genre: "Fiction"
+
+  # "Iona Iverson's Rules for Commuting" by Clare Pooley - London
+  - title: "Iona Iverson's Rules for Commuting"
+    author: "Clare Pooley"
+    locations:
+      - name: "London, England"
+    genre: "Fiction"
+
+  # "The Great Passion" - about Bach
+  - title: "The Great Passion"
+    author: "James Runcie"
+    locations:
+      - name: "Leipzig, Germany"
+    genre: "Historical Fiction"
+
+  # "Lessons in Chemistry" by Bonnie Garmus - 1960s
+  - title: "Lessons in Chemistry"
+    author: "Bonnie Garmus"
+    locations:
+      - name: "United States"
+    genre: "Fiction"
+
+  # "Our American Friend" by Anna Pitoniak
+  - title: "Our American Friend"
+    author: "Anna Pitoniak"
+    locations:
+      - name: "United States"
+      - name: "Russia"
+    genre: "Thriller"
+
+  # "Thank You, Mr. Nixon" by Gish Jen - Chinese diaspora
+  - title: "Thank You, Mr. Nixon"
+    author: "Gish Jen"
+    locations:
+      - name: "United States"
+      - name: "China"
+    genre: "Short Stories"
+
+  # "State of Terror" by Hillary Rodham Clinton and Louise Penny
+  - title: "State of Terror"
+    author: "Hillary Rodham Clinton and Louise Penny"
+    locations:
+      - name: "United States"
+    genre: "Thriller"
+
+  # "Emily's House" by Amy Belding Brown - Emily Dickinson, Massachusetts
+  - title: "Emily's House"
+    author: "Amy Belding Brown"
+    locations:
+      - name: "Amherst, Massachusetts, USA"
+    genre: "Historical Fiction"
+
+  # "The Lincoln Highway" by Amor Towles - American road trip
+  - title: "The Lincoln Highway"
+    author: "Amor Towles"
+    locations:
+      - name: "United States"
+    genre: "Fiction"
+
+  # "All the Lonely People" by Mike Gayle - England, Jamaican immigrant
+  - title: "All the Lonely People"
+    author: "Mike Gayle"
+    locations:
+      - name: "England"
+    genre: "Fiction"
+
+  # "Early Morning Riser" by Katherine Heiny - Boyne City, Michigan
+  - title: "Early Morning Riser"
+    author: "Katherine Heiny"
+    locations:
+      - name: "Boyne City, Michigan, USA"
+    genre: "Fiction"
+
+  # "The Phone Booth at the Edge of the World" - Japan tsunami
+  - title: "The Phone Booth at the Edge of the World"
+    author: "Laura Imai Messina"
+    locations:
+      - name: "Japan"
+    genre: "Fiction"
+
+  # "When Women Were Dragons" by Kelly Barnhill
+  - title: "When Women Were Dragons"
+    author: "Kelly Barnhill"
+    locations:
+      - name: "United States"
+    genre: "Fantasy"
+
+  # "I Must Betray You" by Ruta Sepetys - Romania
+  - title: "I Must Betray You"
+    author: "Ruta Sepetys"
+    locations:
+      - name: "Romania"
+    genre: "Historical Fiction"
+
+# TODO:
+# - Verify/correct book titles as needed
+# - Add review links (optional)
+# - Add cover image URLs (optional)
+# - Refine locations to be more specific (if possible)
+# ============================================================================
+# FORMAT REFERENCE (Quick Copy-Paste Examples)
+# ============================================================================
+#
+# MINIMAL ENTRY (title + one location):
+#   - title: "Book Title"
+#     locations:
+#       - name: "City, Country"
+#
+# WITH AUTHOR:
+#   - title: "Book Title"
+#     author: "Author Name"
+#     locations:
+#       - name: "City, Country"
+#
+# MULTIPLE LOCATIONS:
+#   - title: "Book Title"
+#     locations:
+#       - name: "City 1, Country"
+#       - name: "City 2, Country"
+#
+# WITH COORDINATES (skips geocoding/lets you put a pin specifically):
+#   - title: "Book Title"
+#     locations:
+#       - name: "Paris, France"
+#         lat: 48.8566
+#         lng: 2.3522
+#
+# COMPLETE ENTRY:
+#   - title: "Book Title"
+#     author: "Author Name"
+#     locations:
+#       - name: "City, Country"
+#     cover: "https://example.com/cover.jpg"
+#     review: "https://example.com/review"
+#     year: 2023
+#     genre: "Fiction"
+#
+# ============================================================================
+# TROUBLESHOOTING
+# ============================================================================
+#
+# Location not found?
+#   - Be more specific: "Paris, France" instead of "Paris"
+#   - Check spelling
+#   - Add coordinates manually if you know them
+#
+# Multiple books in same city?
+#   - No problem! The map automatically clusters them together
+#   - Click a cluster to expand and see all books
+#
+# Build taking too long?
+#   - First build geocodes all locations (1 per second rate limit)
+#   - Subsequent builds use cached coordinates and are much faster
