@@ -25,15 +25,15 @@ Build a static, interactive map showing where reviewed books are set, with:
 
 ```
 erindouglass-bookmap/
-├── books.yaml              # Input file (wife edits this) - includes format docs
+├── books.yaml              # Input file - includes format docs
 ├── build.py                # Build script
 ├── requirements.txt        # Python dependencies
 ├── output/
 │   └── index.html          # Generated static map (self-contained)
 ├── cache/
 │   └── geocoding.json      # Cached coordinates (auto-generated)
-├── docs/
-│   └── planning/           # Planning documents
+├── docs/                   # Plan and how-to
+│   └── archive/            # Old planning documents
 ├── README.md               # Setup, usage, and user guide (combined)
 └── SQUARESPACE_GUIDE.md    # Squarespace embedding instructions
 ```
@@ -99,7 +99,7 @@ erindouglass-bookmap/
 
 ## Success Criteria
 
-- [x] Wife can add a book by editing YAML file
+- [x] User can add a book by editing YAML file
 - [x] Build script runs without errors
 - [x] Generated map displays all books
 - [x] Clustering works for duplicate locations
@@ -288,7 +288,7 @@ Author Name (if available)
 - Verify map loads correctly
 
 ### User Testing ✅
-- Have wife add a book to YAML
+- User adds a book to YAML
 - Run build script
 - Verify output looks correct
 - Test embedding in Squarespace

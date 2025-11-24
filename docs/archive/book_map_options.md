@@ -16,7 +16,7 @@ This approach provides:
 - ✅ **Simple workflow**: Edit file → run script → upload HTML
 
 **How it works:**
-1. Wife edits a YAML or CSV file with book information
+1. User edits a YAML or CSV file with book information
 2. Run a build script that geocodes locations and generates static HTML
 3. Upload the HTML file to Squarespace or self-host
 4. Map is fully interactive with clustering for overlapping locations
@@ -160,7 +160,7 @@ This approach provides:
 
 ### How it works:
 - Build a simple web app with an admin interface
-- Wife logs in, adds/edits books via form
+- User logs in, adds/edits books via form
 - Map auto-updates
 - Embed in Squarespace
 
@@ -217,7 +217,7 @@ Upload to Squarespace or self-host
 ### Architecture:
 
 1. **Input File** (YAML or CSV):
-   - Wife edits this file
+   - User edits this file
    - Simple, readable format
    - No JSON syntax to worry about
 
@@ -359,7 +359,7 @@ This eliminates the need for geocoding but requires looking up coordinates (or t
 
 ```
 bookmap/
-├── books.yaml          # Input file (wife edits this)
+├── books.yaml          # Input file
 ├── build.py            # Build script
 ├── index.html          # Generated static HTML
 └── assets/             # Optional: CSS, custom markers, etc.
