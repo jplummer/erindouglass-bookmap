@@ -14,7 +14,7 @@
 # See bottom of file for detailed format documentation and examples
 
 # Configuration
-default_style: "watercolor"  # Map style: positron, voyager, dark, osm, humanitarian, terrain, toner, watercolor, alidade_smooth, alidade_smooth_dark, osm_bright, outdoors
+default_style: "watercolor"  # Map style (free: positron, voyager, dark, osm, humanitarian | needs domain setup: terrain, toner, watercolor, alidade_smooth, alidade_smooth_dark, osm_bright, outdoors)
 
 books:
   # "Super Natural" by Alex Riley - explores species in extreme climates
