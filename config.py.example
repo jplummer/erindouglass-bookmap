@@ -1,0 +1,6 @@
+# Configuration file for API keys and settings
+# Copy this file to config.py and add your actual API key
+
+# Stadia Maps API Key
+# Get yours at: https://client.stadiamaps.com/
+STADIA_API_KEY = "your-api-key-here"

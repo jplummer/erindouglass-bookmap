@@ -15,8 +15,9 @@ cache/
 # Output
 output/
 
-# Environment variables
+# Environment variables and config
 .env
+config.py
 
 # IDE
 .vscode/

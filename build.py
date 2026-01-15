@@ -11,10 +11,12 @@ import time
 import sys
 import re
 from pathlib import Path
-from dotenv import load_dotenv
 
-# Load environment variables from .env file
-load_dotenv()
+# Try to import API key from config file
+try:
+    from config import STADIA_API_KEY
+except ImportError:
+    STADIA_API_KEY = os.getenv('STADIA_API_KEY', '')
 from geopy.geocoders import Nominatim
 from geopy.exc import GeocoderTimedOut, GeocoderServiceError
 
@@ -224,8 +226,14 @@ def process_books(books_data, cache):
             # Add optional fields
             if 'author' in book:
                 processed_book['author'] = book['author']
-            if 'cover' in book:
+            
+            # Handle cover image: explicit cover URL or auto-generate from ISBN
+            if 'cover' in book and book['cover']:
                 processed_book['cover'] = book['cover']
+            elif 'isbn' in book and book['isbn']:
+                # Auto-generate cover URL from ISBN using Open Library Covers API
+                processed_book['cover'] = f"https://covers.openlibrary.org/b/isbn/{book['isbn']}-L.jpg"
+            
             if 'review' in book:
                 processed_book['review'] = book['review']
             if 'year' in book:
@@ -238,12 +246,11 @@ def process_books(books_data, cache):
     return processed_books
 
 
-def generate_map_js(books_data, include_style_switcher=False, default_style='positron'):
+def generate_map_js(books_data, include_style_switcher=False, default_style='positron', default_pin_style='default'):
     """Generate JavaScript code to initialize the map"""
     
     # API key only in preview mode, rely on domain restrictions in production
-    api_key = os.getenv('STADIA_API_KEY', '')
-    api_key_param = f'?api_key={api_key}' if (include_style_switcher and api_key) else ''
+    api_key_param = f'?api_key={STADIA_API_KEY}' if (include_style_switcher and STADIA_API_KEY) else ''
     
     js = """
     // Initialize map (temporary view, will be adjusted to fit markers)
@@ -325,6 +332,61 @@ def generate_map_js(books_data, include_style_switcher=False, default_style='pos
             url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
             attribution: '&copy; <a href="https://www.esri.com/">Esri</a>, Maxar, Earthstar Geographics, and the GIS User Community',
             options: { maxZoom: 19 }
+        },
+        'wikimedia': {
+            url: 'https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png',
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="https://wikimediafoundation.org/wiki/Maps_Terms_of_Use">Wikimedia maps</a>',
+            options: { maxZoom: 18 }
+        },
+        'toner_lite': {
+            url: 'https://tiles.stadiamaps.com/tiles/stamen_toner_lite/{z}/{x}/{y}{r}.png""" + api_key_param + """',
+            attribution: '&copy; <a href="https://stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            options: { maxZoom: 20 }
+        },
+        'voyager_nolabels': {
+            url: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png',
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            options: { subdomains: 'abcd', maxZoom: 19 }
+        },
+        'positron_nolabels': {
+            url: 'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            options: { subdomains: 'abcd', maxZoom: 19 }
+        },
+        'dark_nolabels': {
+            url: 'https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png',
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            options: { subdomains: 'abcd', maxZoom: 19 }
+        },
+        'osm_de': {
+            url: 'https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png',
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            options: { maxZoom: 18 }
+        },
+        'toner_background': {
+            url: 'https://tiles.stadiamaps.com/tiles/stamen_toner_background/{z}/{x}/{y}{r}.png""" + api_key_param + """',
+            attribution: '&copy; <a href="https://stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            options: { maxZoom: 20 }
+        },
+        'toner_lines': {
+            url: 'https://tiles.stadiamaps.com/tiles/stamen_toner_lines/{z}/{x}/{y}{r}.png""" + api_key_param + """',
+            attribution: '&copy; <a href="https://stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            options: { maxZoom: 20 }
+        },
+        'esri_world_street': {
+            url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
+            attribution: '&copy; <a href="https://www.esri.com/">Esri</a>',
+            options: { maxZoom: 19 }
+        },
+        'esri_world_topo': {
+            url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}',
+            attribution: '&copy; <a href="https://www.esri.com/">Esri</a>',
+            options: { maxZoom: 19 }
+        },
+        'esri_natgeo': {
+            url: 'https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}',
+            attribution: '&copy; <a href="https://www.esri.com/">Esri</a>, National Geographic',
+            options: { maxZoom: 16 }
         }
         // Additional providers (require API keys):
         // Mapbox: https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}
@@ -342,7 +404,7 @@ def generate_map_js(books_data, include_style_switcher=False, default_style='pos
     if include_style_switcher:
         js += """
     
-    // Style switcher function (preview mode only)
+    // Map style switcher function (preview mode only)
     window.switchStyle = function(styleName) {
         if (tileLayers[styleName]) {
             map.removeLayer(activeLayer);
@@ -358,6 +420,31 @@ def generate_map_js(books_data, include_style_switcher=False, default_style='pos
             });
             document.querySelector(`[data-style="${styleName}"]`).classList.add('active');
         }
+    };
+    
+    // Pin style switcher function (preview mode only)
+    window.switchPinStyle = function(styleName) {
+        if (pinStyles[styleName]) {
+            currentPinStyle = styleName;
+            
+            // Clear and recreate markers
+            markerLayer.clearLayers();
+            
+            markerDataStore.forEach(stored => {
+                const marker = pinStyles[currentPinStyle].createMarker(stored.lat, stored.lng);
+                marker.bindPopup(createPopupContent(stored.markerData));
+                marker.addTo(markerLayer);
+            });
+            
+            // Update active button
+            document.querySelectorAll('.pin-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-pin="${styleName}"]`).classList.add('active');
+            
+            // Update offscreen indicators
+            setTimeout(updateOffscreenIndicators, 100);
+        }
     };"""
     
     js += """
@@ -365,60 +452,84 @@ def generate_map_js(books_data, include_style_switcher=False, default_style='pos
     // Book data
     const booksData = """ + json.dumps(books_data, indent=4) + """;
     
-    // Collect all markers with their data
-    const allMarkers = [];
-    booksData.forEach(book => {
-        book.locations.forEach(location => {
-            allMarkers.push({
-                book: book,
-                location: location,
-                lat: location.lat,
-                lng: location.lng
-            });
-        });
-    });
-    
-    // Detect duplicate coordinates and apply offset
-    const coordCounts = {};
-    const coordOffsets = {};
-    
-    // Count occurrences of each coordinate
-    allMarkers.forEach(marker => {
-        const key = `${marker.lat},${marker.lng}`;
-        coordCounts[key] = (coordCounts[key] || 0) + 1;
-        coordOffsets[key] = 0;
-    });
-    
-    // Create markers with offset for duplicates
-    const bounds = [];
-    
-    allMarkers.forEach(markerData => {
-        const key = `${markerData.lat},${markerData.lng}`;
-        let lat = markerData.lat;
-        let lng = markerData.lng;
-        
-        // If this coordinate has duplicates, apply a jittery offset
-        if (coordCounts[key] > 1) {
-            const index = coordOffsets[key];
-            const total = coordCounts[key];
-            
-            // Base angle distributed around circle, plus random jitter
-            const baseAngle = (index / total) * 2 * Math.PI;
-            const angleJitter = (Math.random() - 0.5) * Math.PI / 2; // ±45° jitter
-            const angle = baseAngle + angleJitter;
-            
-            // Distance with randomness: 15-35km range
-            const baseOffset = 0.25; // ~25km
-            const distJitter = (Math.random() - 0.5) * 0.2; // ±10km variation
-            const offsetDist = baseOffset + distJitter;
-            
-            lat += offsetDist * Math.cos(angle);
-            lng += offsetDist * Math.sin(angle);
-            
-            coordOffsets[key]++;
+    // Define pin styles
+    const pinStyles = {
+        'default': {
+            name: 'Default Blue',
+            createMarker: (lat, lng) => L.marker([lat, lng])
+        },
+        'burgundy_circle': {
+            name: 'Burgundy Circles',
+            createMarker: (lat, lng) => L.circleMarker([lat, lng], {
+                radius: 8,
+                fillColor: '#8B2635',
+                color: '#fff',
+                weight: 2,
+                opacity: 1,
+                fillOpacity: 0.8
+            })
+        },
+        'black_circle': {
+            name: 'Black Circles',
+            createMarker: (lat, lng) => L.circleMarker([lat, lng], {
+                radius: 8,
+                fillColor: '#2c3e50',
+                color: '#fff',
+                weight: 2,
+                opacity: 1,
+                fillOpacity: 0.9
+            })
+        },
+        'small_burgundy_pin': {
+            name: 'Small Burgundy Pin',
+            createMarker: (lat, lng) => {
+                const icon = L.divIcon({
+                    className: 'custom-pin burgundy-pin',
+                    html: '<div class="pin-content"></div>',
+                    iconSize: [20, 32],
+                    iconAnchor: [10, 32],
+                    popupAnchor: [0, -32]
+                });
+                return L.marker([lat, lng], { icon: icon });
+            }
+        },
+        'small_orange_pin': {
+            name: 'Small Orange Pin',
+            createMarker: (lat, lng) => {
+                const icon = L.divIcon({
+                    className: 'custom-pin orange-pin',
+                    html: '<div class="pin-content"></div>',
+                    iconSize: [20, 32],
+                    iconAnchor: [10, 32],
+                    popupAnchor: [0, -32]
+                });
+                return L.marker([lat, lng], { icon: icon });
+            }
+        },
+        'book_icon': {
+            name: 'Book Icon',
+            createMarker: (lat, lng) => {
+                const icon = L.divIcon({
+                    className: 'book-icon-marker',
+                    html: '<div class="book-icon">📚</div>',
+                    iconSize: [30, 30],
+                    iconAnchor: [15, 15],
+                    popupAnchor: [0, -15]
+                });
+                return L.marker([lat, lng], { icon: icon });
+            }
         }
-        
-        // Create popup content
+    };
+    
+    // Current pin style
+    let currentPinStyle = '""" + default_pin_style + """';
+    
+    // Store marker data for recreation
+    let markerDataStore = [];
+    let markerLayer = L.layerGroup().addTo(map);
+    
+    // Function to create popup content
+    function createPopupContent(markerData) {
         let popupContent = '<div class="book-popup">';
         
         if (markerData.book.cover) {
@@ -446,14 +557,88 @@ def generate_map_js(books_data, include_style_switcher=False, default_style='pos
         }
         
         popupContent += '</div>';
+        return popupContent;
+    }
+    
+    // Function to create all markers with current style
+    function createMarkers() {
+        // Clear existing markers
+        markerLayer.clearLayers();
         
-        // Create marker with adjusted coordinates
-        const marker = L.marker([lat, lng]);
-        marker.bindPopup(popupContent);
-        marker.addTo(map);
+        // Collect all markers with their data
+        const allMarkers = [];
+        booksData.forEach(book => {
+            book.locations.forEach(location => {
+                allMarkers.push({
+                    book: book,
+                    location: location,
+                    lat: location.lat,
+                    lng: location.lng
+                });
+            });
+        });
         
-        bounds.push([lat, lng]);
-    });
+        // Detect duplicate coordinates and apply offset
+        const coordCounts = {};
+        const coordOffsets = {};
+        
+        // Count occurrences of each coordinate
+        allMarkers.forEach(marker => {
+            const key = `${marker.lat},${marker.lng}`;
+            coordCounts[key] = (coordCounts[key] || 0) + 1;
+            coordOffsets[key] = 0;
+        });
+        
+        // Create markers with offset for duplicates
+        const bounds = [];
+        markerDataStore = [];
+        
+        allMarkers.forEach(markerData => {
+            const key = `${markerData.lat},${markerData.lng}`;
+            let lat = markerData.lat;
+            let lng = markerData.lng;
+            
+            // If this coordinate has duplicates, apply a jittery offset
+            if (coordCounts[key] > 1) {
+                const index = coordOffsets[key];
+                const total = coordCounts[key];
+                
+                // Base angle distributed around circle, plus random jitter
+                const baseAngle = (index / total) * 2 * Math.PI;
+                const angleJitter = (Math.random() - 0.5) * Math.PI / 2; // ±45° jitter
+                const angle = baseAngle + angleJitter;
+                
+                // Distance with randomness: 15-35km range
+                const baseOffset = 0.25; // ~25km
+                const distJitter = (Math.random() - 0.5) * 0.2; // ±10km variation
+                const offsetDist = baseOffset + distJitter;
+                
+                lat += offsetDist * Math.cos(angle);
+                lng += offsetDist * Math.sin(angle);
+                
+                coordOffsets[key]++;
+            }
+            
+            // Store for later recreation
+            markerDataStore.push({
+                markerData: markerData,
+                lat: lat,
+                lng: lng
+            });
+            
+            // Create marker with current style
+            const marker = pinStyles[currentPinStyle].createMarker(lat, lng);
+            marker.bindPopup(createPopupContent(markerData));
+            marker.addTo(markerLayer);
+            
+            bounds.push([lat, lng]);
+        });
+        
+        return bounds;
+    }
+    
+    // Initial marker creation
+    const bounds = createMarkers();
     
     // Set default view (centered on Europe/North America, zoom level 3)
     // This prevents extreme outliers from forcing a too-wide view
@@ -531,9 +716,9 @@ def generate_map_js(books_data, include_style_switcher=False, default_style='pos
     return js
 
 
-def generate_html(books_data, preview_mode=False, default_style='positron'):
+def generate_html(books_data, preview_mode=False, default_style='positron', default_pin_style='default'):
     """Generate the HTML file with embedded map"""
-    map_js = generate_map_js(books_data, include_style_switcher=preview_mode, default_style=default_style)
+    map_js = generate_map_js(books_data, include_style_switcher=preview_mode, default_style=default_style, default_pin_style=default_pin_style)
     
     # Read CSS if it exists
     css_content = ""
@@ -720,6 +905,63 @@ def generate_html(books_data, preview_mode=False, default_style='positron'):
             content: '↙';
         }}
         
+        /* Custom pin styles */
+        .custom-pin {{
+            background: transparent;
+            border: none;
+        }}
+        
+        .custom-pin .pin-content {{
+            width: 20px;
+            height: 32px;
+            position: relative;
+        }}
+        
+        .custom-pin .pin-content::before {{
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            left: 0;
+            top: 0;
+        }}
+        
+        .custom-pin .pin-content::after {{
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: white;
+            left: 6px;
+            top: 6px;
+        }}
+        
+        .burgundy-pin .pin-content::before {{
+            background: #8B2635;
+            border: 2px solid white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }}
+        
+        .orange-pin .pin-content::before {{
+            background: #D2691E;
+            border: 2px solid white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }}
+        
+        .book-icon-marker {{
+            background: transparent;
+            border: none;
+            text-align: center;
+        }}
+        
+        .book-icon-marker .book-icon {{
+            font-size: 24px;
+            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.4));
+        }}
+        
         {css_content}"""
     
     # Add preview-specific styles
@@ -779,6 +1021,61 @@ def generate_html(books_data, preview_mode=False, default_style='positron'):
             background: #007bff;
             color: white;
             font-weight: bold;
+        }
+        
+        /* Pin chooser panel (preview mode only) */
+        .pin-chooser {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: white;
+            padding: 12px;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            z-index: 1000;
+            max-width: 250px;
+        }
+        
+        .pin-chooser h3 {
+            margin: 0 0 6px 0;
+            font-size: 14px;
+            color: #333;
+        }
+        
+        .pin-chooser .note {
+            font-size: 10px;
+            color: #888;
+            margin-bottom: 10px;
+            font-style: italic;
+        }
+        
+        .pin-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .pin-btn {
+            padding: 8px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 11px;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        
+        .pin-btn:hover {
+            border-color: #007bff;
+            background: #f8f9fa;
+        }
+        
+        .pin-btn.active {
+            border-color: #007bff;
+            background: #007bff;
+            color: white;
+            font-weight: bold;
         }"""
     
     html += """
@@ -805,13 +1102,39 @@ def generate_html(books_data, preview_mode=False, default_style='positron'):
             ('outdoors', 'Outdoors'),
             ('opentopomap', 'OpenTopoMap'),
             ('cyclosm', 'CyclOSM'),
-            ('esri_world', 'Satellite')
+            ('esri_world', 'Satellite'),
+            ('wikimedia', 'Wikimedia'),
+            ('toner_lite', 'Toner Lite'),
+            ('voyager_nolabels', 'Voyager (no labels)'),
+            ('positron_nolabels', 'Positron (no labels)'),
+            ('dark_nolabels', 'Dark (no labels)'),
+            ('osm_de', 'OSM DE'),
+            ('toner_background', 'Toner BG'),
+            ('toner_lines', 'Toner Lines'),
+            ('esri_world_street', 'Esri Street'),
+            ('esri_world_topo', 'Esri Topo'),
+            ('esri_natgeo', 'Nat Geo')
         ]
         
         buttons_html = ""
         for style_id, style_name in styles:
             active_class = " active" if style_id == default_style else ""
             buttons_html += f'            <button class="style-btn{active_class}" data-style="{style_id}" onclick="switchStyle(\'{style_id}\')">{style_name}</button>\n'
+        
+        # Generate pin style buttons
+        pin_styles_list = [
+            ('default', 'Default Blue'),
+            ('burgundy_circle', 'Burgundy Circles'),
+            ('black_circle', 'Black Circles'),
+            ('small_burgundy_pin', 'Small Burgundy Pin'),
+            ('small_orange_pin', 'Small Orange Pin'),
+            ('book_icon', 'Book Icon')
+        ]
+        
+        pin_buttons_html = ""
+        for pin_id, pin_name in pin_styles_list:
+            active_class = " active" if pin_id == default_pin_style else ""
+            pin_buttons_html += f'            <button class="pin-btn{active_class}" data-pin="{pin_id}" onclick="switchPinStyle(\'{pin_id}\')">{pin_name}</button>\n'
         
         html += f"""
     
@@ -821,6 +1144,15 @@ def generate_html(books_data, preview_mode=False, default_style='positron'):
         <p class="note">Preview only - not included in production</p>
         <div class="style-grid">
 {buttons_html.rstrip()}
+        </div>
+    </div>
+    
+    <!-- Pin Chooser (preview mode only) -->
+    <div class="pin-chooser">
+        <h3>Pin Styles</h3>
+        <p class="note">Preview only - not included in production</p>
+        <div class="pin-grid">
+{pin_buttons_html.rstrip()}
         </div>
     </div>"""
     
@@ -896,13 +1228,17 @@ def main():
     default_style = data.get('default_style', 'positron')
     print(f"Using map style: {default_style}")
     
+    # Get default pin style from config (default to 'default' if not specified)
+    default_pin_style = data.get('default_pin_style', 'default')
+    print(f"Using pin style: {default_pin_style}")
+    
     # Create output directory
     output_path = Path(OUTPUT_DIR)
     output_path.mkdir(parents=True, exist_ok=True)
     
     # Generate production HTML (clean, no style chooser)
     print("Generating production HTML...")
-    html_production = generate_html(processed_books, preview_mode=False, default_style=default_style)
+    html_production = generate_html(processed_books, preview_mode=False, default_style=default_style, default_pin_style=default_pin_style)
     output_file = output_path / "index.html"
     with open(output_file, 'w') as f:
         f.write(html_production)
@@ -910,7 +1246,7 @@ def main():
     
     # Generate preview HTML (with style chooser)
     print("Generating preview HTML...")
-    html_preview = generate_html(processed_books, preview_mode=True, default_style=default_style)
+    html_preview = generate_html(processed_books, preview_mode=True, default_style=default_style, default_pin_style=default_pin_style)
     preview_file = output_path / "preview.html"
     with open(preview_file, 'w') as f:
         f.write(html_preview)
