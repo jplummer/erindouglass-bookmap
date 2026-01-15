@@ -622,9 +622,9 @@ def generate_map_js(books_data, include_style_switcher=False, default_style='pos
                 const angleJitter = (Math.random() - 0.5) * Math.PI / 2; // ±45° jitter
                 const angle = baseAngle + angleJitter;
                 
-                // Distance with randomness: 15-35km range
-                const baseOffset = 0.25; // ~25km
-                const distJitter = (Math.random() - 0.5) * 0.2; // ±10km variation
+                // Distance with randomness: 120-280km range
+                const baseOffset = 2.0; // ~200km
+                const distJitter = (Math.random() - 0.5) * 1.6; // ±80km variation
                 const offsetDist = baseOffset + distJitter;
                 
                 lat += offsetDist * Math.cos(angle);

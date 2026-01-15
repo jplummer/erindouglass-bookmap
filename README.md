@@ -76,7 +76,7 @@ books:
     # ...
 ```
 
-**Map styles:** `positron`, `voyager`, `dark`, `watercolor`, `terrain`, `toner`, `osm`, `humanitarian`  
+**Map styles:** `positron`, `voyager`, `dark`, `watercolor`, `terrain`, `toner`, `osm`, `humanitarian`, and 18 more (see preview.html)  
 **Pin styles:** `burgundy_circle`, `default`, `black_circle`, `small_burgundy_pin`, `small_orange_pin`, `pushpin_emoji`
 
 Use `output/preview.html` to test different combinations visually. Once you've chosen your preferred style, update `books.yaml` with your choices and run `python3 build.py` to regenerate the production map.

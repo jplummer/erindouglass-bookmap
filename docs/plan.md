@@ -10,7 +10,7 @@ Static interactive map showing where reviewed books are set.
 - Leaflet.js for interactive mapping
 - Individual pins with smart offset for duplicates
 - Off-screen indicators showing hidden pins
-- 19 map style options (CartoDB, OSM, Stamen, ESRI, etc.)
+- 26 map style options (CartoDB, OSM, Stamen, ESRI, etc.)
 - 6 pin style options
 - Dual output: production + preview with style chooser
 - Self-contained HTML files
@@ -57,8 +57,7 @@ erindouglass-bookmap/
 │   └── geocoding.json      # Cached coordinates (auto-generated)
 ├── docs/
 │   ├── plan.md             # This file
-│   ├── squarespace_guide.md
-│   └── archive/            # Old planning documents
+│   └── squarespace_guide.md
 └── README.md               # Setup, usage, and user guide
 ```
 
@@ -97,7 +96,6 @@ erindouglass-bookmap/
 
 **Note:** The project is functional as-is. These are optional improvements:
 
-4. Improve styling of book detail tiles
 1. Deploy to Squarespace and verify embedding works
 2. Refine generic locations to be more specific where needed
 
