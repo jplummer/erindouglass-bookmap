@@ -340,9 +340,16 @@ def generate_map_js(books_data):
         bounds.push([lat, lng]);
     });
     
-    // Fit map to show all markers
+    // Set default view (centered on Europe/North America, zoom level 3)
+    // This prevents extreme outliers from forcing a too-wide view
+    // Off-screen indicators will show markers outside this view
     if (bounds.length > 0) {
-        map.fitBounds(bounds, { padding: [50, 50] });
+        // Calculate center of all markers
+        let centerLat = bounds.reduce((sum, b) => sum + b[0], 0) / bounds.length;
+        let centerLng = bounds.reduce((sum, b) => sum + b[1], 0) / bounds.length;
+        
+        // Set view with moderate zoom (3 = continent level, good for global view)
+        map.setView([centerLat, centerLng], 3);
     }
     
     // Create offscreen marker indicators
