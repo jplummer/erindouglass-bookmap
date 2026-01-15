@@ -282,12 +282,20 @@ def generate_map_js(books_data):
         let lat = markerData.lat;
         let lng = markerData.lng;
         
-        // If this coordinate has duplicates, apply a small circular offset
+        // If this coordinate has duplicates, apply a jittery offset
         if (coordCounts[key] > 1) {
             const index = coordOffsets[key];
             const total = coordCounts[key];
-            const angle = (index / total) * 2 * Math.PI;
-            const offsetDist = 0.01; // ~1km offset
+            
+            // Base angle distributed around circle, plus random jitter
+            const baseAngle = (index / total) * 2 * Math.PI;
+            const angleJitter = (Math.random() - 0.5) * Math.PI / 2; // ±45° jitter
+            const angle = baseAngle + angleJitter;
+            
+            // Distance with randomness: 15-35km range
+            const baseOffset = 0.25; // ~25km
+            const distJitter = (Math.random() - 0.5) * 0.2; // ±10km variation
+            const offsetDist = baseOffset + distJitter;
             
             lat += offsetDist * Math.cos(angle);
             lng += offsetDist * Math.sin(angle);
@@ -336,6 +344,67 @@ def generate_map_js(books_data):
     if (bounds.length > 0) {
         map.fitBounds(bounds, { padding: [50, 50] });
     }
+    
+    // Create offscreen marker indicators
+    const directions = ['north', 'south', 'east', 'west', 'northeast', 'northwest', 'southeast', 'southwest'];
+    const indicators = {};
+    
+    directions.forEach(dir => {
+        const indicator = document.createElement('div');
+        indicator.className = `offscreen-indicator ${dir}`;
+        indicator.id = `indicator-${dir}`;
+        document.getElementById('map').appendChild(indicator);
+        indicators[dir] = indicator;
+    });
+    
+    // Store all marker positions for offscreen tracking
+    const allMarkerPositions = bounds.map(pos => ({ lat: pos[0], lng: pos[1] }));
+    
+    // Function to update offscreen indicators
+    function updateOffscreenIndicators() {
+        const mapBounds = map.getBounds();
+        const counts = {
+            north: 0, south: 0, east: 0, west: 0,
+            northeast: 0, northwest: 0, southeast: 0, southwest: 0
+        };
+        
+        allMarkerPositions.forEach(pos => {
+            if (!mapBounds.contains([pos.lat, pos.lng])) {
+                const isNorth = pos.lat > mapBounds.getNorth();
+                const isSouth = pos.lat < mapBounds.getSouth();
+                const isEast = pos.lng > mapBounds.getEast();
+                const isWest = pos.lng < mapBounds.getWest();
+                
+                // Determine direction
+                if (isNorth && isEast) counts.northeast++;
+                else if (isNorth && isWest) counts.northwest++;
+                else if (isSouth && isEast) counts.southeast++;
+                else if (isSouth && isWest) counts.southwest++;
+                else if (isNorth) counts.north++;
+                else if (isSouth) counts.south++;
+                else if (isEast) counts.east++;
+                else if (isWest) counts.west++;
+            }
+        });
+        
+        // Update indicator visibility and text
+        Object.keys(counts).forEach(dir => {
+            const indicator = indicators[dir];
+            if (counts[dir] > 0) {
+                indicator.textContent = counts[dir];
+                indicator.classList.add('visible');
+            } else {
+                indicator.classList.remove('visible');
+            }
+        });
+    }
+    
+    // Update indicators on map movement
+    map.on('moveend', updateOffscreenIndicators);
+    map.on('zoomend', updateOffscreenIndicators);
+    
+    // Initial update after a delay (to let map settle)
+    setTimeout(updateOffscreenIndicators, 200);
     """
     return js
 
@@ -430,6 +499,103 @@ def generate_html(books_data):
         
         .book-popup .review-link:hover {{
             background-color: #0056b3;
+        }}
+        
+        /* Offscreen marker indicators */
+        .offscreen-indicator {{
+            position: absolute;
+            background-color: rgba(0, 123, 255, 0.9);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            pointer-events: none;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            display: none;
+            white-space: nowrap;
+        }}
+        
+        .offscreen-indicator.visible {{
+            display: block;
+        }}
+        
+        .offscreen-indicator::before {{
+            content: '→';
+            margin-right: 4px;
+        }}
+        
+        .offscreen-indicator.north {{
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }}
+        
+        .offscreen-indicator.north::before {{
+            content: '↑';
+        }}
+        
+        .offscreen-indicator.south {{
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }}
+        
+        .offscreen-indicator.south::before {{
+            content: '↓';
+        }}
+        
+        .offscreen-indicator.east {{
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+        }}
+        
+        .offscreen-indicator.west {{
+            top: 50%;
+            left: 20px;
+            transform: translateY(-50%);
+        }}
+        
+        .offscreen-indicator.west::before {{
+            content: '←';
+        }}
+        
+        .offscreen-indicator.northeast {{
+            top: 20px;
+            right: 20px;
+        }}
+        
+        .offscreen-indicator.northeast::before {{
+            content: '↗';
+        }}
+        
+        .offscreen-indicator.northwest {{
+            top: 20px;
+            left: 20px;
+        }}
+        
+        .offscreen-indicator.northwest::before {{
+            content: '↖';
+        }}
+        
+        .offscreen-indicator.southeast {{
+            bottom: 20px;
+            right: 20px;
+        }}
+        
+        .offscreen-indicator.southeast::before {{
+            content: '↘';
+        }}
+        
+        .offscreen-indicator.southwest {{
+            bottom: 20px;
+            left: 20px;
+        }}
+        
+        .offscreen-indicator.southwest::before {{
+            content: '↙';
         }}
         
         {css_content}
