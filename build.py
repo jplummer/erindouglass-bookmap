@@ -551,26 +551,25 @@ def generate_map_js(books_data, include_style_switcher=False, default_style='pos
             popupContent += `<img src="${markerData.book.cover}" alt="${markerData.book.title}" class="book-cover" />`;
         }
         
+        popupContent += '<div class="book-details">';
+        
+        if (markerData.book.genre) {
+            popupContent += `<p class="genre">${markerData.book.genre}</p>`;
+        }
+        
         popupContent += `<h3>${markerData.book.title}</h3>`;
         
         if (markerData.book.author) {
             popupContent += `<p class="author">${markerData.book.author}</p>`;
         }
         
-        popupContent += `<p class="location">📍 ${markerData.location.name}</p>`;
-        
-        if (markerData.book.year || markerData.book.genre) {
-            popupContent += '<p class="meta">';
-            if (markerData.book.year) popupContent += markerData.book.year;
-            if (markerData.book.year && markerData.book.genre) popupContent += ' • ';
-            if (markerData.book.genre) popupContent += markerData.book.genre;
-            popupContent += '</p>';
-        }
+        popupContent += `<p class="location">${markerData.location.name}</p>`;
         
         if (markerData.book.review) {
-            popupContent += `<a href="${markerData.book.review}" target="_blank" class="review-link">Read Review →</a>`;
+            popupContent += `<a href="${markerData.book.review}" target="_blank" class="review-link">Read Erin's review</a>`;
         }
         
+        popupContent += '</div>';
         popupContent += '</div>';
         return popupContent;
     }
@@ -769,58 +768,75 @@ def generate_html(books_data, preview_mode=False, default_style='positron', defa
             height: 100vh;
         }}
         
+        .leaflet-popup-close-button {{
+            top: 6px !important;
+            right: 6px !important;
+        }}
+        
         .book-popup {{
-            min-width: 200px;
-            max-width: 300px;
+            display: flex;
+            gap: 12px;
+            min-width: 250px;
+            max-width: 350px;
         }}
         
         .book-popup .book-cover {{
-            width: 100%;
-            max-width: 150px;
+            width: 80px;
             height: auto;
-            display: block;
-            margin: 0 auto 10px;
+            flex-shrink: 0;
             border-radius: 4px;
+            align-self: flex-start;
         }}
         
-        .book-popup h3 {{
-            font-size: 16px;
-            margin-bottom: 5px;
-            color: #333;
+        .book-popup .book-details {{
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            flex-grow: 1;
         }}
         
-        .book-popup .author {{
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 8px;
+        .book-popup .genre {{
+            font-size: 10pt;
+            color: #888;
+            margin: 0 0 2px 0;
             font-style: italic;
         }}
         
-        .book-popup .location {{
-            font-size: 13px;
-            color: #555;
-            margin-bottom: 5px;
+        .book-popup h3 {{
+            font-size: 16pt;
+            margin: 0;
+            color: #000;
+            line-height: 1.1;
         }}
         
-        .book-popup .meta {{
-            font-size: 12px;
+        .book-popup .author {{
+            font-size: 16pt;
+            color: #000;
+            margin: 0;
+            line-height: 1.1;
+        }}
+        
+        .book-popup .location {{
+            font-size: 10pt;
             color: #888;
-            margin-bottom: 10px;
+            margin: 2px 0 0 0;
         }}
         
         .book-popup .review-link {{
-            display: inline-block;
-            padding: 6px 12px;
-            background-color: #007bff;
-            color: white;
+            font-size: 10pt;
+            color: #007bff;
             text-decoration: none;
-            border-radius: 4px;
-            font-size: 13px;
-            margin-top: 5px;
+            margin-top: auto;
+            display: inline-block;
+            align-self: flex-end;
+        }}
+        
+        .book-popup .review-link::after {{
+            content: ' →';
         }}
         
         .book-popup .review-link:hover {{
-            background-color: #0056b3;
+            text-decoration: underline;
         }}
         
         /* Offscreen marker indicators */
