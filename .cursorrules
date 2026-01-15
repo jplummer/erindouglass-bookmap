@@ -1,0 +1,22 @@
+# Project Rules for Book Location Map
+
+## Git and Testing Workflow
+- ALWAYS test and verify functionality works BEFORE committing
+- When making changes to code that generates output (like build.py), run the build and verify the output before any git commit
+- For this project: run `python3 build.py` and check that output/index.html and output/preview.html work correctly
+- Never commit untested code
+- If tests fail or output is broken, fix it before committing
+
+## Code Quality
+- Fix any linter errors before considering work complete
+- Read generated files to verify they contain expected content
+- Don't assume code works - verify it
+
+## Documentation
+- Keep documentation up-to-date with actual implementation
+- Don't use "wife" or mention "Erin" by name in documentation
+- Keep project simple - avoid feature creep
+
+## General
+- Test first, commit second
+- When in doubt, verify before acting

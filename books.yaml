@@ -13,6 +13,9 @@
 # After editing: Run `python3 build.py` to generate the map
 # See bottom of file for detailed format documentation and examples
 
+# Configuration
+default_style: "watercolor"  # Map style: positron, voyager, dark, osm, humanitarian, terrain, toner, watercolor, alidade_smooth, alidade_smooth_dark, osm_bright, outdoors
+
 books:
   # "Super Natural" by Alex Riley - explores species in extreme climates
   # Note: This book covers multiple extreme locations - may need to add specific locations
@@ -30,15 +33,76 @@ books:
       - name: "Germany"
     genre: "History"
 
+  # "The Rarest Fruit" by Gaëlle Bélem - Edmond Albius, enslaved botanist who discovered vanilla pollination
+  - title: "The Rarest Fruit"
+    author: "Gaëlle Bélem"
+    locations:
+      - name: "Réunion Island"
+    genre: "Historical Fiction"
+
+  # "Amity" by Nathan Harris - post-Civil War Western, separated Black siblings
+  - title: "Amity"
+    author: "Nathan Harris"
+    locations:
+      - name: "Louisiana, USA"
+      - name: "Mexico"
+    genre: "Historical Fiction"
+
+  # "Cloud Cuckoo Land" by Anthony Doerr - interwoven plotlines across centuries
+  - title: "Cloud Cuckoo Land"
+    author: "Anthony Doerr"
+    locations:
+      - name: "Constantinople"
+      - name: "Idaho, USA"
+    genre: "Historical Fiction"
+
+  # "Properties of Thirst" by Marianne Wiggins - WWII California, water wars, Japanese internment
+  - title: "Properties of Thirst"
+    author: "Marianne Wiggins"
+    locations:
+      - name: "California, USA"
+    genre: "Historical Fiction"
+
+  # "The Rose Code" by Kate Quinn - Bletchley Park code-breakers, WWII
+  - title: "The Rose Code"
+    author: "Kate Quinn"
+    locations:
+      - name: "Bletchley Park, England"
+    genre: "Historical Fiction"
+
+  # "The Forest of Vanishing Stars" by Kristin Harmel - Jews hiding in forest, WWII
+  - title: "The Forest of Vanishing Stars"
+    author: "Kristin Harmel"
+    locations:
+      - name: "Nalibocka Forest, Belarus"
+        lat: 53.88444
+        lng: 26.44250
+    genre: "Historical Fiction"
+
+  # "The Woman With the Blue Star" by Pam Jenoff - Kraków ghetto and sewers, WWII
+  - title: "The Woman With the Blue Star"
+    author: "Pam Jenoff"
+    locations:
+      - name: "Kraków, Poland"
+    genre: "Historical Fiction"
+
+  # "The Riviera House" by Natasha Lester - Nazi art theft and French Riviera, WWII
+  - title: "The Riviera House"
+    author: "Natasha Lester"
+    locations:
+      - name: "Paris, France"
+      - name: "French Riviera, France"
+    genre: "Historical Fiction"
+
   # Maria Reva novel - Ukraine war, matchmaking, mollusks
-  - title: "Good Citizens Need No Leaders"
+  - title: "Endling"
     author: "Maria Reva"
     locations:
       - name: "Ukraine"
     genre: "Fiction"
 
   # Rose Valland biography by Michelle Young - Nazi art thefts in occupied France
-  - title: "The Art Thief"
+  - title: "The Art Spy"
     author: "Michelle Young"
     locations:
       - name: "Paris, France"
@@ -52,7 +116,7 @@ books:
     genre: "Fiction"
 
   # Benjamin Franklin biography by Richard Munson
-  - title: "The Ingenious Mr. Pyke"
+  - title: "Ingenious: A Biography of Benjamin Franklin, Scientist"
     author: "Richard Munson"
     locations:
       - name: "Philadelphia, Pennsylvania, USA"

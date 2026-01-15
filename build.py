@@ -234,7 +234,7 @@ def process_books(books_data, cache):
     return processed_books
 
 
-def generate_map_js(books_data, include_style_switcher=False):
+def generate_map_js(books_data, include_style_switcher=False, default_style='positron'):
     """Generate JavaScript code to initialize the map"""
     js = """
     // Initialize map (temporary view, will be adjusted to fit markers)
@@ -268,24 +268,44 @@ def generate_map_js(books_data, include_style_switcher=False):
             options: { maxZoom: 19 }
         },
         'terrain': {
-            url: 'https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.png',
-            attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-            options: { subdomains: 'abcd', maxZoom: 18 }
+            url: 'https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png?api_key=ff662e52-c0eb-488e-97fc-150a421dc3e0',
+            attribution: '&copy; <a href="https://stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            options: { maxZoom: 18 }
         },
         'toner': {
-            url: 'https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}{r}.png',
-            attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-            options: { subdomains: 'abcd', maxZoom: 18 }
+            url: 'https://tiles.stadiamaps.com/tiles/stamen_toner/{z}/{x}/{y}{r}.png?api_key=ff662e52-c0eb-488e-97fc-150a421dc3e0',
+            attribution: '&copy; <a href="https://stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            options: { maxZoom: 20 }
         },
         'watercolor': {
-            url: 'https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.jpg',
-            attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-            options: { subdomains: 'abcd', maxZoom: 16 }
+            url: 'https://tiles.stadiamaps.com/tiles/stamen_watercolor/{z}/{x}/{y}.jpg?api_key=ff662e52-c0eb-488e-97fc-150a421dc3e0',
+            attribution: '&copy; <a href="https://stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            options: { maxZoom: 16 }
+        },
+        'alidade_smooth': {
+            url: 'https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png?api_key=ff662e52-c0eb-488e-97fc-150a421dc3e0',
+            attribution: '&copy; <a href="https://stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            options: { maxZoom: 20 }
+        },
+        'alidade_smooth_dark': {
+            url: 'https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png?api_key=ff662e52-c0eb-488e-97fc-150a421dc3e0',
+            attribution: '&copy; <a href="https://stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            options: { maxZoom: 20 }
+        },
+        'osm_bright': {
+            url: 'https://tiles.stadiamaps.com/tiles/osm_bright/{z}/{x}/{y}{r}.png?api_key=ff662e52-c0eb-488e-97fc-150a421dc3e0',
+            attribution: '&copy; <a href="https://stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            options: { maxZoom: 20 }
+        },
+        'outdoors': {
+            url: 'https://tiles.stadiamaps.com/tiles/outdoors/{z}/{x}/{y}{r}.png?api_key=ff662e52-c0eb-488e-97fc-150a421dc3e0',
+            attribution: '&copy; <a href="https://stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            options: { maxZoom: 20 }
         }
     };
     
-    // Start with Positron (default)
-    let currentLayer = 'positron';
+    // Start with configured default style
+    let currentLayer = '""" + default_style + """';
     let activeLayer = L.tileLayer(tileLayers[currentLayer].url, {
         attribution: tileLayers[currentLayer].attribution,
         ...tileLayers[currentLayer].options
@@ -483,9 +503,9 @@ def generate_map_js(books_data, include_style_switcher=False):
     return js
 
 
-def generate_html(books_data, preview_mode=False):
+def generate_html(books_data, preview_mode=False, default_style='positron'):
     """Generate the HTML file with embedded map"""
-    map_js = generate_map_js(books_data, include_style_switcher=preview_mode)
+    map_js = generate_map_js(books_data, include_style_switcher=preview_mode, default_style=default_style)
     
     # Read CSS if it exists
     css_content = ""
@@ -679,8 +699,8 @@ def generate_html(books_data, preview_mode=False):
         html += """
         
         /* Style chooser panel (preview mode only) */
-        .style-chooser {{
-            position: absolute;
+        .style-chooser {
+            position: fixed;
             top: 20px;
             right: 20px;
             background: white;
@@ -689,28 +709,28 @@ def generate_html(books_data, preview_mode=False):
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             z-index: 1000;
             max-width: 250px;
-        }}
+        }
         
-        .style-chooser h3 {{
+        .style-chooser h3 {
             margin: 0 0 10px 0;
             font-size: 16px;
             color: #333;
-        }}
+        }
         
-        .style-chooser .note {{
+        .style-chooser .note {
             font-size: 11px;
             color: #888;
             margin-bottom: 15px;
             font-style: italic;
-        }}
+        }
         
-        .style-grid {{
+        .style-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 8px;
-        }}
+        }
         
-        .style-btn {{
+        .style-btn {
             padding: 10px;
             border: 2px solid #ddd;
             background: white;
@@ -719,19 +739,19 @@ def generate_html(books_data, preview_mode=False):
             font-size: 12px;
             transition: all 0.2s;
             text-align: center;
-        }}
+        }
         
-        .style-btn:hover {{
+        .style-btn:hover {
             border-color: #007bff;
             background: #f8f9fa;
-        }}
+        }
         
-        .style-btn.active {{
+        .style-btn.active {
             border-color: #007bff;
             background: #007bff;
             color: white;
             font-weight: bold;
-        }}"""
+        }"""
     
     html += """
     </style>
@@ -756,10 +776,14 @@ def generate_html(books_data, preview_mode=False):
             <button class="style-btn" data-style="terrain" onclick="switchStyle('terrain')">Terrain</button>
             <button class="style-btn" data-style="toner" onclick="switchStyle('toner')">Toner</button>
             <button class="style-btn" data-style="watercolor" onclick="switchStyle('watercolor')">Watercolor</button>
+            <button class="style-btn" data-style="alidade_smooth" onclick="switchStyle('alidade_smooth')">Alidade Smooth</button>
+            <button class="style-btn" data-style="alidade_smooth_dark" onclick="switchStyle('alidade_smooth_dark')">Alidade Dark</button>
+            <button class="style-btn" data-style="osm_bright" onclick="switchStyle('osm_bright')">OSM Bright</button>
+            <button class="style-btn" data-style="outdoors" onclick="switchStyle('outdoors')">Outdoors</button>
         </div>
     </div>"""
     
-    html += """
+    html += f"""
     
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -827,13 +851,17 @@ def main():
     save_cache(cache)
     print(f"Cached {len(cache)} locations")
     
+    # Get default style from config (default to 'positron' if not specified)
+    default_style = data.get('default_style', 'positron')
+    print(f"Using map style: {default_style}")
+    
     # Create output directory
     output_path = Path(OUTPUT_DIR)
     output_path.mkdir(parents=True, exist_ok=True)
     
     # Generate production HTML (clean, no style chooser)
     print("Generating production HTML...")
-    html_production = generate_html(processed_books, preview_mode=False)
+    html_production = generate_html(processed_books, preview_mode=False, default_style=default_style)
     output_file = output_path / "index.html"
     with open(output_file, 'w') as f:
         f.write(html_production)
@@ -841,7 +869,7 @@ def main():
     
     # Generate preview HTML (with style chooser)
     print("Generating preview HTML...")
-    html_preview = generate_html(processed_books, preview_mode=True)
+    html_preview = generate_html(processed_books, preview_mode=True, default_style=default_style)
     preview_file = output_path / "preview.html"
     with open(preview_file, 'w') as f:
         f.write(html_preview)
