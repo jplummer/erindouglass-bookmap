@@ -247,65 +247,95 @@ def generate_map_js(books_data):
         maxZoom: 19
     }).addTo(map);
     
-    // Create marker cluster group
-    const markers = L.markerClusterGroup({
-        chunkedLoading: true,
-        spiderfyOnMaxZoom: true,
-        showCoverageOnHover: false,
-        zoomToBoundsOnClick: true
-    });
-    
     // Book data
     const booksData = """ + json.dumps(books_data, indent=4) + """;
     
-    // Create markers for each book location
+    // Collect all markers with their data
+    const allMarkers = [];
     booksData.forEach(book => {
         book.locations.forEach(location => {
-            // Create popup content
-            let popupContent = '<div class="book-popup">';
-            
-            if (book.cover) {
-                popupContent += `<img src="${book.cover}" alt="${book.title}" class="book-cover" />`;
-            }
-            
-            popupContent += `<h3>${book.title}</h3>`;
-            
-            if (book.author) {
-                popupContent += `<p class="author">${book.author}</p>`;
-            }
-            
-            popupContent += `<p class="location">📍 ${location.name}</p>`;
-            
-            if (book.year || book.genre) {
-                popupContent += '<p class="meta">';
-                if (book.year) popupContent += book.year;
-                if (book.year && book.genre) popupContent += ' • ';
-                if (book.genre) popupContent += book.genre;
-                popupContent += '</p>';
-            }
-            
-            if (book.review) {
-                popupContent += `<a href="${book.review}" target="_blank" class="review-link">Read Review →</a>`;
-            }
-            
-            popupContent += '</div>';
-            
-            // Create marker
-            const marker = L.marker([location.lat, location.lng]);
-            marker.bindPopup(popupContent);
-            markers.addLayer(marker);
+            allMarkers.push({
+                book: book,
+                location: location,
+                lat: location.lat,
+                lng: location.lng
+            });
         });
     });
     
-    // Add markers to map
-    map.addLayer(markers);
+    // Detect duplicate coordinates and apply offset
+    const coordCounts = {};
+    const coordOffsets = {};
     
-    // Fit map to show all markers (use cluster group bounds for accuracy)
-    setTimeout(() => {
-        if (markers.getBounds().isValid()) {
-            map.fitBounds(markers.getBounds(), { padding: [50, 50], maxZoom: 10 });
+    // Count occurrences of each coordinate
+    allMarkers.forEach(marker => {
+        const key = `${marker.lat},${marker.lng}`;
+        coordCounts[key] = (coordCounts[key] || 0) + 1;
+        coordOffsets[key] = 0;
+    });
+    
+    // Create markers with offset for duplicates
+    const bounds = [];
+    
+    allMarkers.forEach(markerData => {
+        const key = `${markerData.lat},${markerData.lng}`;
+        let lat = markerData.lat;
+        let lng = markerData.lng;
+        
+        // If this coordinate has duplicates, apply a small circular offset
+        if (coordCounts[key] > 1) {
+            const index = coordOffsets[key];
+            const total = coordCounts[key];
+            const angle = (index / total) * 2 * Math.PI;
+            const offsetDist = 0.01; // ~1km offset
+            
+            lat += offsetDist * Math.cos(angle);
+            lng += offsetDist * Math.sin(angle);
+            
+            coordOffsets[key]++;
         }
-    }, 100);
+        
+        // Create popup content
+        let popupContent = '<div class="book-popup">';
+        
+        if (markerData.book.cover) {
+            popupContent += `<img src="${markerData.book.cover}" alt="${markerData.book.title}" class="book-cover" />`;
+        }
+        
+        popupContent += `<h3>${markerData.book.title}</h3>`;
+        
+        if (markerData.book.author) {
+            popupContent += `<p class="author">${markerData.book.author}</p>`;
+        }
+        
+        popupContent += `<p class="location">📍 ${markerData.location.name}</p>`;
+        
+        if (markerData.book.year || markerData.book.genre) {
+            popupContent += '<p class="meta">';
+            if (markerData.book.year) popupContent += markerData.book.year;
+            if (markerData.book.year && markerData.book.genre) popupContent += ' • ';
+            if (markerData.book.genre) popupContent += markerData.book.genre;
+            popupContent += '</p>';
+        }
+        
+        if (markerData.book.review) {
+            popupContent += `<a href="${markerData.book.review}" target="_blank" class="review-link">Read Review →</a>`;
+        }
+        
+        popupContent += '</div>';
+        
+        // Create marker with adjusted coordinates
+        const marker = L.marker([lat, lng]);
+        marker.bindPopup(popupContent);
+        marker.addTo(map);
+        
+        bounds.push([lat, lng]);
+    });
+    
+    // Fit map to show all markers
+    if (bounds.length > 0) {
+        map.fitBounds(bounds, { padding: [50, 50] });
+    }
     """
     return js
 
@@ -330,8 +360,6 @@ def generate_html(books_data):
     
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
     
     <!-- Custom CSS -->
     <style>
@@ -412,7 +440,6 @@ def generate_html(books_data):
     
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
     
     <!-- Map initialization -->
     <script>
