@@ -1,462 +1,321 @@
-# Book Locations Map - Input File
-#
-# TODO
-# - Verify/correct book titles as needed
-# - Add review links (optional)
-# - Add cover image URLs (optional)
-# - Refine locations to be more specific (if possible)
-#
-# QUICK REFERENCE
-# Required: title, locations (with name)
-# Optional: author, cover, review, year, genre
-#
-# After editing: Run `python3 build.py` to generate the map
-# See bottom of file for detailed format documentation and examples
-
-# Configuration
-default_style: "watercolor"  # Map style (free: positron, voyager, dark, osm, humanitarian | needs domain setup: terrain, toner, watercolor, alidade_smooth, alidade_smooth_dark, osm_bright, outdoors)
-
+default_style: watercolor
 books:
-  # "Super Natural" by Alex Riley - explores species in extreme climates
-  # Note: This book covers multiple extreme locations - may need to add specific locations
-  - title: "Super Natural"
-    author: "Alex Riley"
-    locations:
-      - name: "Antarctica"
-      - name: "Sahara Desert"
-    genre: "Science"
-
-  # "Monopoly X" by Philip E. Orbanes - POW camps in Germany
-  - title: "Monopoly X"
-    author: "Philip E. Orbanes"
-    locations:
-      - name: "Germany"
-    genre: "History"
-
-  # "The Rarest Fruit" by Gaëlle Bélem - Edmond Albius, enslaved botanist who discovered vanilla pollination
-  - title: "The Rarest Fruit"
-    author: "Gaëlle Bélem"
-    locations:
-      - name: "Réunion Island"
-    genre: "Historical Fiction"
-
-  # "Amity" by Nathan Harris - post-Civil War Western, separated Black siblings
-  - title: "Amity"
-    author: "Nathan Harris"
-    locations:
-      - name: "Louisiana, USA"
-      - name: "Mexico"
-    genre: "Historical Fiction"
-
-  # "Cloud Cuckoo Land" by Anthony Doerr - interwoven plotlines across centuries
-  - title: "Cloud Cuckoo Land"
-    author: "Anthony Doerr"
-    locations:
-      - name: "Constantinople"
-      - name: "Idaho, USA"
-    genre: "Historical Fiction"
-
-  # "Properties of Thirst" by Marianne Wiggins - WWII California, water wars, Japanese internment
-  - title: "Properties of Thirst"
-    author: "Marianne Wiggins"
-    locations:
-      - name: "California, USA"
-    genre: "Historical Fiction"
-
-  # "The Rose Code" by Kate Quinn - Bletchley Park code-breakers, WWII
-  - title: "The Rose Code"
-    author: "Kate Quinn"
-    locations:
-      - name: "Bletchley Park, England"
-    genre: "Historical Fiction"
-
-  # "The Forest of Vanishing Stars" by Kristin Harmel - Jews hiding in forest, WWII
-  - title: "The Forest of Vanishing Stars"
-    author: "Kristin Harmel"
-    locations:
-      - name: "Nalibocka Forest, Belarus"
-        lat: 53.88444
-        lng: 26.44250
-    genre: "Historical Fiction"
-
-  # "The Woman With the Blue Star" by Pam Jenoff - Kraków ghetto and sewers, WWII
-  - title: "The Woman With the Blue Star"
-    author: "Pam Jenoff"
-    locations:
-      - name: "Kraków, Poland"
-    genre: "Historical Fiction"
-
-  # "The Riviera House" by Natasha Lester - Nazi art theft and French Riviera, WWII
-  - title: "The Riviera House"
-    author: "Natasha Lester"
-    locations:
-      - name: "Paris, France"
-      - name: "French Riviera, France"
-    genre: "Historical Fiction"
-
-  # Maria Reva novel - Ukraine war, matchmaking, mollusks
-  - title: "Endling"
-    author: "Maria Reva"
-    locations:
-      - name: "Ukraine"
-    genre: "Fiction"
-
-  # Rose Valland biography by Michelle Young - Nazi art thefts in occupied France
-  - title: "The Art Spy"
-    author: "Michelle Young"
-    locations:
-      - name: "Paris, France"
-    genre: "Biography"
-
-  # "The Dream Hotel" by Laila Lalami - privacy concerns, big tech
-  - title: "The Dream Hotel"
-    author: "Laila Lalami"
-    locations:
-      - name: "United States"
-    genre: "Fiction"
-
-  # Benjamin Franklin biography by Richard Munson
-  - title: "Ingenious: A Biography of Benjamin Franklin, Scientist"
-    author: "Richard Munson"
-    locations:
-      - name: "Philadelphia, Pennsylvania, USA"
-    genre: "Biography"
-
-  # "Polostan" by Neal Stephenson - Russian American, Ukraine, Montana, 1920s-30s
-  - title: "Polostan"
-    author: "Neal Stephenson"
-    locations:
-      - name: "Ukraine"
-      - name: "Montana, USA"
-    genre: "Historical Fiction"
-
-  # "Frederick Douglass: A Novel"
-  - title: "Frederick Douglass: A Novel"
-    author: "Frederick Douglass"
-    locations:
-      - name: "United States"
-    genre: "Historical Fiction"
-
-  # Ulysses S. Grant novel by Jon Clinch
-  - title: "The General and Julia"
-    author: "Jon Clinch"
-    locations:
-      - name: "United States"
-    genre: "Historical Fiction"
-
-  # "The Heaven & Earth Grocery Store" by James McBride - Pennsylvania
-  - title: "The Heaven & Earth Grocery Store"
-    author: "James McBride"
-    locations:
-      - name: "Pennsylvania, USA"
-    genre: "Fiction"
-
-  # "Daughter of the Dragon" - Anna May Wong biography
-  - title: "Daughter of the Dragon"
-    author: "Yunte Huang"
-    locations:
-      - name: "Los Angeles, California, USA"
-      - name: "Hollywood, California, USA"
-    genre: "Biography"
-
-  # "Parallel Lines" by Ruth Marks Eglash - Jerusalem
-  - title: "Parallel Lines"
-    author: "Ruth Marks Eglash"
-    locations:
-      - name: "Jerusalem, Israel"
-    genre: "Young Adult Fiction"
-
-  # "The Last Dance" by Mark Billingham - UK mystery
-  - title: "The Last Dance"
-    author: "Mark Billingham"
-    locations:
-      - name: "United Kingdom"
-    genre: "Mystery"
-
-  # "The Covenant of Water" by Abraham Verghese - Kerala, India
-  - title: "The Covenant of Water"
-    author: "Abraham Verghese"
-    locations:
-      - name: "Kerala, India"
-    genre: "Fiction"
-
-  # "Birnam Wood" by Eleanor Catton - New Zealand
-  - title: "Birnam Wood"
-    author: "Eleanor Catton"
-    locations:
-      - name: "New Zealand"
-    genre: "Fiction"
-
-  # "Getting out of Saigon" by Ralph White - Vietnam
-  - title: "Getting out of Saigon"
-    author: "Ralph White"
-    locations:
-      - name: "Ho Chi Minh City, Vietnam"
-    genre: "Memoir"
-
-  # "Cold People" by Tom Rob Smith - Antarctica
-  - title: "Cold People"
-    author: "Tom Rob Smith"
-    locations:
-      - name: "Antarctica"
-    genre: "Science Fiction"
-
-  # "Roses, in the Mouth of a Lion" by Bushra Rehman - Pakistani American, Queens
-  - title: "Roses, in the Mouth of a Lion"
-    author: "Bushra Rehman"
-    locations:
-      - name: "Queens, New York, USA"
-    genre: "Fiction"
-
-  # "Master Slave Husband Wife" by Ilyon Woo - Georgia, 1840s
-  - title: "Master Slave Husband Wife"
-    author: "Ilyon Woo"
-    locations:
-      - name: "Georgia, USA"
-    genre: "History"
-
-  # "The Consequences" by Manuel Muñoz - border crossings, California
-  - title: "The Consequences"
-    author: "Manuel Muñoz"
-    locations:
-      - name: "California, USA"
-      - name: "Mexico"
-    genre: "Short Stories"
-
-  # "Blackwater Falls" by Ausma Zehanat Khan - Colorado mystery
-  - title: "Blackwater Falls"
-    author: "Ausma Zehanat Khan"
-    locations:
-      - name: "Colorado, USA"
-    genre: "Mystery"
-
-  # "Lessons" by Ian McEwan
-  - title: "Lessons"
-    author: "Ian McEwan"
-    locations:
-      - name: "United Kingdom"
-    genre: "Fiction"
-
-  # "The Wall" by Marlen Haushofer - Bavarian forest
-  - title: "The Wall"
-    author: "Marlen Haushofer"
-    locations:
-      - name: "Bavaria, Germany"
-    genre: "Fiction"
-
-  # "Iona Iverson's Rules for Commuting" by Clare Pooley - London
-  - title: "Iona Iverson's Rules for Commuting"
-    author: "Clare Pooley"
-    locations:
-      - name: "London, England"
-    genre: "Fiction"
-
-  # "The Great Passion" - about Bach
-  - title: "The Great Passion"
-    author: "James Runcie"
-    locations:
-      - name: "Leipzig, Germany"
-    genre: "Historical Fiction"
-
-  # "Lessons in Chemistry" by Bonnie Garmus - 1960s
-  - title: "Lessons in Chemistry"
-    author: "Bonnie Garmus"
-    locations:
-      - name: "United States"
-    genre: "Fiction"
-
-  # "Our American Friend" by Anna Pitoniak
-  - title: "Our American Friend"
-    author: "Anna Pitoniak"
-    locations:
-      - name: "United States"
-      - name: "Russia"
-    genre: "Thriller"
-
-  # "Thank You, Mr. Nixon" by Gish Jen - Chinese diaspora
-  - title: "Thank You, Mr. Nixon"
-    author: "Gish Jen"
-    locations:
-      - name: "United States"
-      - name: "China"
-    genre: "Short Stories"
-
-  # "State of Terror" by Hillary Rodham Clinton and Louise Penny
-  - title: "State of Terror"
-    author: "Hillary Rodham Clinton and Louise Penny"
-    locations:
-      - name: "United States"
-    genre: "Thriller"
-
-  # "Emily's House" by Amy Belding Brown - Emily Dickinson, Massachusetts
-  - title: "Emily's House"
-    author: "Amy Belding Brown"
-    locations:
-      - name: "Amherst, Massachusetts, USA"
-    genre: "Historical Fiction"
-
-  # "The Lincoln Highway" by Amor Towles - American road trip
-  - title: "The Lincoln Highway"
-    author: "Amor Towles"
-    locations:
-      - name: "United States"
-    genre: "Fiction"
-
-  # "All the Lonely People" by Mike Gayle - England, Jamaican immigrant
-  - title: "All the Lonely People"
-    author: "Mike Gayle"
-    locations:
-      - name: "England"
-    genre: "Fiction"
-
-  # "Early Morning Riser" by Katherine Heiny - Boyne City, Michigan
-  - title: "Early Morning Riser"
-    author: "Katherine Heiny"
-    locations:
-      - name: "Boyne City, Michigan, USA"
-    genre: "Fiction"
-
-  # "The Phone Booth at the Edge of the World" - Japan tsunami
-  - title: "The Phone Booth at the Edge of the World"
-    author: "Laura Imai Messina"
-    locations:
-      - name: "Japan"
-    genre: "Fiction"
-
-  # "When Women Were Dragons" by Kelly Barnhill
-  - title: "When Women Were Dragons"
-    author: "Kelly Barnhill"
-    locations:
-      - name: "United States"
-    genre: "Fantasy"
-
-  # "I Must Betray You" by Ruta Sepetys - Romania
-  - title: "I Must Betray You"
-    author: "Ruta Sepetys"
-    locations:
-      - name: "Romania"
-    genre: "Historical Fiction"
-
-# ============================================================================
-# DETAILED FORMAT DOCUMENTATION
-# ============================================================================
-#
-# BASIC FORMAT:
-#   Each book needs at least a title and one location:
-#
-#   - title: "Book Title"
-#     locations:
-#       - name: "City, Country"
-#
-# REQUIRED FIELDS:
-#   - title: The book's title (required, must be non-empty string)
-#   - locations: At least one location (required, must be a list)
-#     - name: Location name, e.g. "Paris, France" (required)
-#     - lat/lng: Optional coordinates if you know them (numbers between valid ranges)
-#
-# OPTIONAL FIELDS:
-#   - author: Author's name (string)
-#   - cover: URL to book cover image (full http:// or https:// URL)
-#   - review: URL to your review (full http:// or https:// URL)
-#   - year: Publication year (number or string)
-#   - genre: Book genre (string)
-#
-# ============================================================================
-# EXAMPLES
-# ============================================================================
-#
-# MINIMAL ENTRY (title + one location):
-#   - title: "Book Title"
-#     locations:
-#       - name: "City, Country"
-#
-# WITH AUTHOR:
-#   - title: "Book Title"
-#     author: "Author Name"
-#     locations:
-#       - name: "City, Country"
-#
-# MULTIPLE LOCATIONS:
-#   - title: "Book Title"
-#     locations:
-#       - name: "City 1, Country"
-#       - name: "City 2, Country"
-#
-# WITH COORDINATES (skips geocoding):
-#   - title: "Book Title"
-#     locations:
-#       - name: "Paris, France"
-#         lat: 48.8566
-#         lng: 2.3522
-#
-# COMPLETE ENTRY:
-#   - title: "The Paris Wife"
-#     author: "Paula McLain"
-#     locations:
-#       - name: "Paris, France"
-#       - name: "Brest, France"
-#     cover: "https://example.com/covers/paris-wife.jpg"
-#     review: "https://example.com/reviews/paris-wife"
-#     year: 2011
-#     genre: "Historical Fiction"
-#
-# ============================================================================
-# TIPS
-# ============================================================================
-#
-# Location Names:
-#   - Be specific: "Paris, France" is better than just "Paris"
-#   - Include country for clarity
-#   - Use standard place names for best geocoding results
-#
-# Multiple Locations:
-#   - List all locations where the book is set
-#   - Each location will get its own marker on the map
-#
-# Coordinates:
-#   - If you know lat/lng, include them to skip geocoding
-#   - Latitude: -90 to 90
-#   - Longitude: -180 to 180
-#
-# Covers:
-#   - Use publicly accessible image URLs
-#   - Recommended size: 200-300px wide
-#   - Must start with http:// or https://
-#
-# Review Links:
-#   - Full URLs to your review pages
-#   - Links open in a new tab when clicked
-#   - Must start with http:// or https://
-#
-# ============================================================================
-# TROUBLESHOOTING
-# ============================================================================
-#
-# Location not found?
-#   - Be more specific: "Paris, France" instead of "Paris"
-#   - Check spelling
-#   - Add coordinates manually if you know them
-#
-# Multiple books in same city?
-#   - No problem! The map automatically clusters them together
-#   - Click a cluster to expand and see all books
-#   - Zoom in to separate clustered markers
-#
-# Build taking too long?
-#   - First build geocodes all locations (1 per second rate limit)
-#   - Subsequent builds use cached coordinates and are much faster
-#
-# Validation errors?
-#   - Check that required fields (title, locations) are present
-#   - Ensure locations is a list with at least one entry
-#   - Verify location names are non-empty strings
-#   - Check that coordinates (if provided) are valid numbers in correct ranges
-#
-# ============================================================================
-# AFTER EDITING
-# ============================================================================
-#
-# 1. Save this file
-# 2. Run: python3 build.py
-# 3. Preview: open output/index.html
-# 4. Upload output/index.html to your website
+- title: Super Natural
+  author: Alex Riley
+  isbn: '9781324079187'
+  locations:
+  - name: Antarctica
+  - name: Sahara Desert
+  review: https://www.csmonitor.com/Books/Author-Q-As/2025/0926/super-natural-alex-riley
+  genre: Science
+- title: Monopoly X
+  author: Philip E. Orbanes
+  isbn: '9780063425132'
+  locations:
+  - name: Germany
+  review: https://www.csmonitor.com/Books/Author-Q-As/2025/0725/monopoly-x-philip-orbanes-world-war-2
+  genre: History
+- title: The Rarest Fruit
+  author: Gaëlle Bélem
+  isbn: '9798889660996'
+  locations:
+  - name: Réunion Island
+  review: https://www.csmonitor.com/Books/Book-Reviews/2025/0710/black-botanist-edmond-albius-19th-century
+  genre: Historical Fiction
+- title: Amity
+  author: Nathan Harris
+  isbn: '9780316456241'
+  locations:
+  - name: Louisiana, USA
+  - name: Mexico
+  review: https://www.csmonitor.com/Books/Book-Reviews/2025/1126/black-western-amity-nathan-harris
+  genre: Historical Fiction
+- title: Cloud Cuckoo Land
+  author: Anthony Doerr
+  isbn: '9781982168438'
+  locations:
+  - name: Constantinople
+  - name: Idaho, USA
+  review: https://www.csmonitor.com/Books/Book-Reviews/2021/0928/Cosmic-puzzle-pieces-come-together-in-masterly-Cloud-Cuckoo-Land
+  genre: Historical Fiction
+- title: Properties of Thirst
+  author: Marianne Wiggins
+  isbn: '9781416571261'
+  locations:
+  - name: California, USA
+  review: https://www.csmonitor.com/Books/Book-Reviews/2022/1013/Manzanar-camp-novel-explores-moral-culpability-during-World-War-II
+  genre: Historical Fiction
+- title: The Rose Code
+  author: Kate Quinn
+  isbn: '9780063059412'
+  locations:
+  - name: Bletchley Park, England
+  review: https://www.csmonitor.com/Books/Book-Reviews/2021/0825/Life-in-wartime-Women-dominate-a-quartet-of-World-War-II-novels
+  genre: Historical Fiction
+- title: The Forest of Vanishing Stars
+  author: Kristin Harmel
+  isbn: '9781982158934'
+  locations:
+  - name: Nalibocka Forest, Belarus
+    lat: 53.88444
+    lng: 26.4425
+  review: https://www.csmonitor.com/Books/Book-Reviews/2021/0825/Life-in-wartime-Women-dominate-a-quartet-of-World-War-II-novels
+  genre: Historical Fiction
+- title: The Woman With the Blue Star
+  author: Pam Jenoff
+  isbn: '9780778311546'
+  locations:
+  - name: Kraków, Poland
+  review: https://www.csmonitor.com/Books/Book-Reviews/2021/0825/Life-in-wartime-Women-dominate-a-quartet-of-World-War-II-novels
+  genre: Historical Fiction
+- title: The Riviera House
+  author: Natasha Lester
+  isbn: '9781538717318'
+  locations:
+  - name: Paris, France
+  - name: French Riviera, France
+  review: https://www.csmonitor.com/Books/Book-Reviews/2021/0825/Life-in-wartime-Women-dominate-a-quartet-of-World-War-II-novels
+  genre: Historical Fiction
+- title: Endling
+  author: Maria Reva
+  isbn: '9780385545310'
+  locations:
+  - name: Ukraine
+  review: https://www.csmonitor.com/Books/Book-Reviews/2025/0605/endling-debut-novel-maria-reva
+  genre: Fiction
+- title: The Art Spy
+  author: Michelle Young
+  isbn: '9780063295896'
+  locations:
+  - name: Paris, France
+  review: https://www.csmonitor.com/Books/Author-Q-As/2025/0529/michelle-young-the-art-spy-second-world-war
+  genre: Biography
+- title: The Dream Hotel
+  author: Laila Lalami
+  isbn: '9780593317600'
+  locations:
+  - name: United States
+  review: https://www.csmonitor.com/Books/Author-Q-As/2025/0314/laila-lalami-the-dream-hotel
+  genre: Fiction
+- title: 'Ingenious: A Biography of Benjamin Franklin, Scientist'
+  author: Richard Munson
+  isbn: '9780393882230'
+  locations:
+  - name: Philadelphia, Pennsylvania, USA
+  review: https://www.csmonitor.com/Books/Author-Q-As/2025/0110/richard-munson-ingenious-benjamin-franklin
+  genre: Biography
+- title: Polostan
+  author: Neal Stephenson
+  isbn: '9780062334497'
+  locations:
+  - name: Ukraine
+  - name: Montana, USA
+  review: https://www.csmonitor.com/Books/Author-Q-As/2024/1205/neal-stephenson-polostan-novel
+  genre: Historical Fiction
+- title: 'Frederick Douglass: A Novel'
+  author: Sidney Morrison
+  isbn: '9780998825793'
+  locations:
+  - name: United States
+  review: https://www.csmonitor.com/Books/Book-Reviews/2024/0731/frederick-douglass-novel-sidney-morrison
+  genre: Historical Fiction
+- title: The General and Julia
+  author: Jon Clinch
+  isbn: '9781668009789'
+  locations:
+  - name: United States
+  review: https://www.csmonitor.com/Books/2024/0103/A-novelist-envisions-the-last-days-of-Ulysses-S.-Grant
+  genre: Historical Fiction
+- title: The Heaven & Earth Grocery Store
+  author: James McBride
+  isbn: '9780593422946'
+  locations:
+  - name: Pennsylvania, USA
+  review: https://www.csmonitor.com/Books/Book-Reviews/2023/1012/The-Heaven-Earth-Grocery-Store-weaves-a-tale-of-love-and-community
+  genre: Fiction
+- title: Daughter of the Dragon
+  author: Yunte Huang
+  isbn: '9781631495809'
+  locations:
+  - name: Los Angeles, California, USA
+  - name: Hollywood, California, USA
+  review: https://www.csmonitor.com/Books/Book-Reviews/2023/1012/Anna-May-Wong-blazed-a-trail-for-Asian-actors-in-Hollywood
+  genre: Biography
+- title: Parallel Lines
+  author: Ruth Marks Eglash
+  isbn: '9781685132163'
+  locations:
+  - name: Jerusalem, Israel
+  review: https://www.csmonitor.com/Books/Author-Q-As/2023/0921/To-explain-Jerusalem-s-conflicts-she-wrote-a-young-adult-novel
+  genre: Young Adult Fiction
+- title: The Last Dance
+  author: Mark Billingham
+  isbn: '9780802161949'
+  locations:
+  - name: United Kingdom
+  review: https://www.csmonitor.com/Books/Book-Reviews/2023/0811/Two-to-tango-Mark-Billingham-mystery-explores-partnership
+  genre: Mystery
+- title: The Covenant of Water
+  author: Abraham Verghese
+  isbn: '9780802162175'
+  locations:
+  - name: Kerala, India
+  review: https://www.csmonitor.com/Books/2023/0717/In-a-land-shaped-by-water-a-family-tale-of-persistence
+  genre: Fiction
+- title: Birnam Wood
+  author: Eleanor Catton
+  isbn: '9780374110338'
+  locations:
+  - name: New Zealand
+  review: https://www.csmonitor.com/Books/2023/0607/Eleanor-Catton-talks-about-Birnam-Wood-and-the-seduction-of-certainty
+  genre: Fiction
+- title: Getting out of Saigon
+  author: Ralph White
+  isbn: '9781982195175'
+  locations:
+  - name: Ho Chi Minh City, Vietnam
+  review: https://www.csmonitor.com/Books/Author-Q-As/2023/0517/A-daring-escape-How-an-American-banker-rescued-113-Vietnamese-civilians
+  genre: Memoir
+- title: Cold People
+  author: Tom Rob Smith
+  isbn: '9781982198404'
+  locations:
+  - name: Antarctica
+  review: https://www.csmonitor.com/Books/Book-Reviews/2023/0410/Sci-fi-novel-Cold-People-explores-ethics-of-human-bioengineering
+  genre: Science Fiction
+- title: Roses, in the Mouth of a Lion
+  author: Bushra Rehman
+  isbn: '9781250834782'
+  locations:
+  - name: Queens, New York, USA
+  review: https://www.csmonitor.com/Books/Book-Reviews/2023/0221/Coming-of-age-novel-overflows-with-humor-heartache-and-honesty
+  genre: Fiction
+- title: Master Slave Husband Wife
+  author: Ilyon Woo
+  isbn: '9781501191060'
+  locations:
+  - name: Georgia, USA
+  review: https://www.csmonitor.com/Books/Author-Q-As/2023/0213/A-daring-escape-from-slavery-and-the-love-story-behind-it
+  genre: History
+- title: The Consequences
+  author: Manuel Muñoz
+  isbn: '9781644452066'
+  locations:
+  - name: California, USA
+  - name: Mexico
+  review: https://www.csmonitor.com/Books/Book-Reviews/2023/0105/The-uneasy-inbetweenness-of-lives-that-cross-borders
+  genre: Short Stories
+- title: Blackwater Falls
+  author: Ausma Zehanat Khan
+  isbn: '9781250822383'
+  locations:
+  - name: Colorado, USA
+  review: https://www.csmonitor.com/Books/2022/1215/Blackwater-Falls-is-a-whodunit-that-goes-below-the-surface
+  genre: Mystery
+- title: Lessons
+  author: Ian McEwan
+  isbn: '9780593535202'
+  locations:
+  - name: United Kingdom
+  review: https://www.csmonitor.com/Books/Book-Reviews/2022/1122/Ian-McEwan-s-Lessons-explores-complex-emotional-terrain
+  genre: Fiction
+- title: The Wall
+  author: Marlen Haushofer
+  isbn: '9780811231947'
+  locations:
+  - name: Bavaria, Germany
+  review: https://www.csmonitor.com/Books/Book-Reviews/2022/0727/Survival-tale-The-Wall-pits-a-woman-against-strange-forces
+  genre: Fiction
+- title: Iona Iverson's Rules for Commuting
+  author: Clare Pooley
+  isbn: '9781984878649'
+  locations:
+  - name: London, England
+  review: https://www.csmonitor.com/Books/Book-Reviews/2022/0606/Facades-are-dropped-and-judgments-suspended-on-a-commuter-train
+  genre: Fiction
+- title: The Great Passion
+  author: James Runcie
+  isbn: '9781635570670'
+  locations:
+  - name: Leipzig, Germany
+  review: https://www.csmonitor.com/Books/Book-Reviews/2022/0429/A-novel-envisions-what-it-would-be-like-to-study-with-Bach
+  genre: Historical Fiction
+- title: Lessons in Chemistry
+  author: Bonnie Garmus
+  isbn: '9780385547345'
+  locations:
+  - name: United States
+  review: https://www.csmonitor.com/Books/2022/0408/Lessons-in-Chemistry-catalyzes-science-cooking-and-humor
+  genre: Fiction
+- title: Our American Friend
+  author: Anna Pitoniak
+  isbn: '9781982158965'
+  locations:
+  - name: United States
+  - name: Russia
+  review: https://www.csmonitor.com/Books/Book-Reviews/2022/0328/Whispers-lies-and-coercion-fail-to-vanquish-truth
+  genre: Thriller
+- title: Thank You, Mr. Nixon
+  author: Gish Jen
+  isbn: '9780593319895'
+  locations:
+  - name: United States
+  - name: China
+  review: https://www.csmonitor.com/Books/Book-Reviews/2022/0204/Thank-You-Mr.-Nixon-and-other-tales-of-the-Chinese-diaspora
+  genre: Short Stories
+- title: State of Terror
+  author: Hillary Rodham Clinton and Louise Penny
+  isbn: '9781982173678'
+  locations:
+  - name: United States
+  review: https://www.csmonitor.com/Books/Book-Reviews/2021/1110/Clinton-and-Penny-s-State-of-Terror-catapults-a-powerful-woman-into-risk-taking
+  genre: Thriller
+- title: Emily's House
+  author: Amy Belding Brown
+  isbn: '9780593199633'
+  locations:
+  - name: Amherst, Massachusetts, USA
+  review: https://www.csmonitor.com/Books/Book-Reviews/2021/1012/In-the-novel-Emily-s-House-the-Dickinsons-Irish-maid-speaks-her-mind
+  genre: Historical Fiction
+- title: The Lincoln Highway
+  author: Amor Towles
+  isbn: '9780735222359'
+  locations:
+  - name: United States
+  review: https://www.csmonitor.com/Books/2021/1005/Amor-Towles-creates-an-American-road-trip-of-epic-proportions
+  genre: Fiction
+- title: All the Lonely People
+  author: Mike Gayle
+  isbn: '9781538720165'
+  locations:
+  - name: England
+  review: https://www.csmonitor.com/Books/Book-Reviews/2021/0921/Warmhearted-All-the-Lonely-People-strikes-at-isolation
+  genre: Fiction
+- title: Early Morning Riser
+  author: Katherine Heiny
+  isbn: '9780525659341'
+  locations:
+  - name: Boyne City, Michigan, USA
+  review: https://www.csmonitor.com/Books/Book-Reviews/2021/0621/Romantic-entanglements-bring-humor-and-heartache-to-small-town
+  genre: Fiction
+- title: The Phone Booth at the Edge of the World
+  author: Laura Imai Messina
+  isbn: '9781419754302'
+  locations:
+  - name: Japan
+  review: https://www.csmonitor.com/Books/Book-Reviews/2021/0309/Japan-tsunami-aftermath-provides-the-setting-for-this-quiet-wise-novel
+  genre: Fiction
+- title: When Women Were Dragons
+  author: Kelly Barnhill
+  isbn: '9780385548229'
+  locations:
+  - name: United States
+  review: https://www.csmonitor.com/Books/Book-Reviews/2022/0616/When-Women-Were-Dragons-imagines-a-fiery-response-to-female-suppression
+  genre: Fantasy
+- title: I Must Betray You
+  author: Ruta Sepetys
+  isbn: '9781984836038'
+  locations:
+  - name: Romania
+  review: https://www.csmonitor.com/Books/Book-Reviews/2022/0328/Whispers-lies-and-coercion-fail-to-vanquish-truth
+  genre: Historical Fiction

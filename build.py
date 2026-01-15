@@ -229,10 +229,19 @@ def process_books(books_data, cache):
             
             # Handle cover image: explicit cover URL or auto-generate from ISBN
             if 'cover' in book and book['cover']:
-                processed_book['cover'] = book['cover']
+                # Check if it's a local file path (starts with "covers/")
+                if book['cover'].startswith('covers/'):
+                    # Convert to Google Books static link using ISBN
+                    if 'isbn' in book and book['isbn']:
+                        processed_book['cover'] = f"https://books.google.com/books?vid=ISBN{book['isbn']}&printsec=frontcover&img=1&zoom=1"
+                    else:
+                        processed_book['cover'] = book['cover']
+                else:
+                    # Use explicit URL as-is
+                    processed_book['cover'] = book['cover']
             elif 'isbn' in book and book['isbn']:
-                # Auto-generate cover URL from ISBN using Open Library Covers API
-                processed_book['cover'] = f"https://covers.openlibrary.org/b/isbn/{book['isbn']}-L.jpg"
+                # Auto-generate cover URL from ISBN using Google Books static link
+                processed_book['cover'] = f"https://books.google.com/books?vid=ISBN{book['isbn']}&printsec=frontcover&img=1&zoom=1"
             
             if 'review' in book:
                 processed_book['review'] = book['review']
@@ -445,6 +454,12 @@ def generate_map_js(books_data, include_style_switcher=False, default_style='pos
             // Update offscreen indicators
             setTimeout(updateOffscreenIndicators, 100);
         }
+    };
+    
+    // Panel toggle function (preview mode only)
+    window.togglePanel = function() {
+        const panel = document.getElementById('stylePanel');
+        panel.classList.toggle('collapsed');
     };"""
     
     js += """
@@ -506,12 +521,12 @@ def generate_map_js(books_data, include_style_switcher=False, default_style='pos
                 return L.marker([lat, lng], { icon: icon });
             }
         },
-        'book_icon': {
-            name: 'Book Icon',
+        'pushpin_emoji': {
+            name: 'Pushpin Emoji',
             createMarker: (lat, lng) => {
                 const icon = L.divIcon({
-                    className: 'book-icon-marker',
-                    html: '<div class="book-icon">📚</div>',
+                    className: 'emoji-icon-marker',
+                    html: '<div class="emoji-icon">📌</div>',
                     iconSize: [30, 30],
                     iconAnchor: [15, 15],
                     popupAnchor: [0, -15]
@@ -951,13 +966,13 @@ def generate_html(books_data, preview_mode=False, default_style='positron', defa
             box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }}
         
-        .book-icon-marker {{
+        .emoji-icon-marker {{
             background: transparent;
             border: none;
             text-align: center;
         }}
         
-        .book-icon-marker .book-icon {{
+        .emoji-icon-marker .emoji-icon {{
             font-size: 24px;
             filter: drop-shadow(0 2px 3px rgba(0,0,0,0.4));
         }}
@@ -968,109 +983,114 @@ def generate_html(books_data, preview_mode=False, default_style='positron', defa
     if preview_mode:
         html += """
         
-        /* Style chooser panel (preview mode only) */
-        .style-chooser {
+        /* Combined style chooser panel (preview mode only) */
+        .style-panel {
             position: fixed;
-            top: 10px;
-            right: 10px;
+            top: 8px;
+            right: 8px;
             background: white;
-            padding: 12px;
-            border-radius: 6px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            border-radius: 4px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
             z-index: 1000;
-            max-width: 300px;
+            max-width: 240px;
+            transition: all 0.3s ease;
         }
         
-        .style-chooser h3 {
-            margin: 0 0 6px 0;
-            font-size: 14px;
-            color: #333;
+        .style-panel.collapsed .panel-content {
+            display: none;
         }
         
-        .style-chooser .note {
+        .panel-toggle {
+            padding: 6px 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            width: 100%;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s;
+        }
+        
+        .panel-toggle:hover {
+            background: #0056b3;
+        }
+        
+        .toggle-icon {
             font-size: 10px;
-            color: #888;
+            transition: transform 0.3s;
+        }
+        
+        .style-panel.collapsed .toggle-icon {
+            transform: rotate(180deg);
+        }
+        
+        .panel-content {
+            padding: 8px;
+        }
+        
+        .panel-section {
             margin-bottom: 10px;
+        }
+        
+        .panel-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .panel-section h3 {
+            margin: 0 0 5px 0;
+            font-size: 10px;
+            color: #666;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .note {
+            font-size: 8px;
+            color: #999;
+            margin-bottom: 8px;
             font-style: italic;
+            text-align: center;
         }
         
         .style-grid {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            gap: 5px;
-        }
-        
-        .style-btn {
-            padding: 6px 4px;
-            border: 1px solid #ddd;
-            background: white;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 10px;
-            transition: all 0.2s;
-            text-align: center;
-        }
-        
-        .style-btn:hover {
-            border-color: #007bff;
-            background: #f8f9fa;
-        }
-        
-        .style-btn.active {
-            border-color: #007bff;
-            background: #007bff;
-            color: white;
-            font-weight: bold;
-        }
-        
-        /* Pin chooser panel (preview mode only) */
-        .pin-chooser {
-            position: fixed;
-            top: 10px;
-            left: 10px;
-            background: white;
-            padding: 12px;
-            border-radius: 6px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-            z-index: 1000;
-            max-width: 250px;
-        }
-        
-        .pin-chooser h3 {
-            margin: 0 0 6px 0;
-            font-size: 14px;
-            color: #333;
-        }
-        
-        .pin-chooser .note {
-            font-size: 10px;
-            color: #888;
-            margin-bottom: 10px;
-            font-style: italic;
+            gap: 3px;
         }
         
         .pin-grid {
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            gap: 3px;
         }
         
+        .style-btn,
         .pin-btn {
-            padding: 8px;
+            padding: 5px 3px;
             border: 1px solid #ddd;
             background: white;
-            border-radius: 3px;
+            border-radius: 2px;
             cursor: pointer;
-            font-size: 11px;
+            font-size: 9px;
             transition: all 0.2s;
             text-align: center;
+            line-height: 1.2;
         }
         
+        .style-btn:hover,
         .pin-btn:hover {
             border-color: #007bff;
             background: #f8f9fa;
         }
         
+        .style-btn.active,
         .pin-btn.active {
             border-color: #007bff;
             background: #007bff;
@@ -1090,24 +1110,24 @@ def generate_html(books_data, preview_mode=False, default_style='positron', defa
         styles = [
             ('positron', 'Positron'),
             ('voyager', 'Voyager'),
-            ('dark', 'Dark Matter'),
+            ('dark', 'Dark'),
             ('osm', 'OSM'),
-            ('humanitarian', 'Humanitarian'),
+            ('humanitarian', 'HOT'),
             ('terrain', 'Terrain'),
             ('toner', 'Toner'),
             ('watercolor', 'Watercolor'),
-            ('alidade_smooth', 'Alidade Smooth'),
+            ('alidade_smooth', 'Alidade'),
             ('alidade_smooth_dark', 'Alidade Dark'),
             ('osm_bright', 'OSM Bright'),
             ('outdoors', 'Outdoors'),
-            ('opentopomap', 'OpenTopoMap'),
+            ('opentopomap', 'TopoMap'),
             ('cyclosm', 'CyclOSM'),
             ('esri_world', 'Satellite'),
             ('wikimedia', 'Wikimedia'),
             ('toner_lite', 'Toner Lite'),
-            ('voyager_nolabels', 'Voyager (no labels)'),
-            ('positron_nolabels', 'Positron (no labels)'),
-            ('dark_nolabels', 'Dark (no labels)'),
+            ('voyager_nolabels', 'Voyager NL'),
+            ('positron_nolabels', 'Positron NL'),
+            ('dark_nolabels', 'Dark NL'),
             ('osm_de', 'OSM DE'),
             ('toner_background', 'Toner BG'),
             ('toner_lines', 'Toner Lines'),
@@ -1123,12 +1143,12 @@ def generate_html(books_data, preview_mode=False, default_style='positron', defa
         
         # Generate pin style buttons
         pin_styles_list = [
-            ('default', 'Default Blue'),
-            ('burgundy_circle', 'Burgundy Circles'),
-            ('black_circle', 'Black Circles'),
-            ('small_burgundy_pin', 'Small Burgundy Pin'),
-            ('small_orange_pin', 'Small Orange Pin'),
-            ('book_icon', 'Book Icon')
+            ('default', 'Blue Pin'),
+            ('burgundy_circle', 'Burgundy Circle'),
+            ('black_circle', 'Black Circle'),
+            ('small_burgundy_pin', 'Burgundy Drop'),
+            ('small_orange_pin', 'Orange Drop'),
+            ('pushpin_emoji', 'Pushpin 📌')
         ]
         
         pin_buttons_html = ""
@@ -1138,21 +1158,28 @@ def generate_html(books_data, preview_mode=False, default_style='positron', defa
         
         html += f"""
     
-    <!-- Style Chooser (preview mode only) -->
-    <div class="style-chooser">
-        <h3>Map Styles</h3>
-        <p class="note">Preview only - not included in production</p>
-        <div class="style-grid">
-{buttons_html.rstrip()}
-        </div>
-    </div>
-    
-    <!-- Pin Chooser (preview mode only) -->
-    <div class="pin-chooser">
-        <h3>Pin Styles</h3>
-        <p class="note">Preview only - not included in production</p>
-        <div class="pin-grid">
+    <!-- Combined Style Panel (preview mode only) -->
+    <div class="style-panel" id="stylePanel">
+        <button class="panel-toggle" onclick="togglePanel()">
+            <span>Map & Pin Styles</span>
+            <span class="toggle-icon">▼</span>
+        </button>
+        <div class="panel-content">
+            <p class="note">Preview only - not included in production</p>
+            
+            <div class="panel-section">
+                <h3>Pin Styles</h3>
+                <div class="pin-grid">
 {pin_buttons_html.rstrip()}
+                </div>
+            </div>
+            
+            <div class="panel-section">
+                <h3>Map Tiles</h3>
+                <div class="style-grid">
+{buttons_html.rstrip()}
+                </div>
+            </div>
         </div>
     </div>"""
     
@@ -1228,8 +1255,8 @@ def main():
     default_style = data.get('default_style', 'positron')
     print(f"Using map style: {default_style}")
     
-    # Get default pin style from config (default to 'default' if not specified)
-    default_pin_style = data.get('default_pin_style', 'default')
+    # Get default pin style from config (default to 'burgundy_circle' if not specified)
+    default_pin_style = data.get('default_pin_style', 'burgundy_circle')
     print(f"Using pin style: {default_pin_style}")
     
     # Create output directory
