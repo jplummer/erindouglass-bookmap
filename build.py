@@ -234,18 +234,85 @@ def process_books(books_data, cache):
     return processed_books
 
 
-def generate_map_js(books_data):
+def generate_map_js(books_data, include_style_switcher=False):
     """Generate JavaScript code to initialize the map"""
     js = """
     // Initialize map (temporary view, will be adjusted to fit markers)
     const map = L.map('map');
     
-    // Add CartoDB Positron tiles (light, minimal style)
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-        subdomains: 'abcd',
-        maxZoom: 19
-    }).addTo(map);
+    // Define available tile layers
+    const tileLayers = {
+        'positron': {
+            url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            options: { subdomains: 'abcd', maxZoom: 19 }
+        },
+        'voyager': {
+            url: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            options: { subdomains: 'abcd', maxZoom: 19 }
+        },
+        'dark': {
+            url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            options: { subdomains: 'abcd', maxZoom: 19 }
+        },
+        'osm': {
+            url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            options: { maxZoom: 19 }
+        },
+        'humanitarian': {
+            url: 'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Tiles style by <a href="https://www.hotosm.org/" target="_blank">Humanitarian OpenStreetMap Team</a>',
+            options: { maxZoom: 19 }
+        },
+        'terrain': {
+            url: 'https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.png',
+            attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            options: { subdomains: 'abcd', maxZoom: 18 }
+        },
+        'toner': {
+            url: 'https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}{r}.png',
+            attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            options: { subdomains: 'abcd', maxZoom: 18 }
+        },
+        'watercolor': {
+            url: 'https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.jpg',
+            attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            options: { subdomains: 'abcd', maxZoom: 16 }
+        }
+    };
+    
+    // Start with Positron (default)
+    let currentLayer = 'positron';
+    let activeLayer = L.tileLayer(tileLayers[currentLayer].url, {
+        attribution: tileLayers[currentLayer].attribution,
+        ...tileLayers[currentLayer].options
+    }).addTo(map);"""
+    
+    if include_style_switcher:
+        js += """
+    
+    // Style switcher function (preview mode only)
+    window.switchStyle = function(styleName) {
+        if (tileLayers[styleName]) {
+            map.removeLayer(activeLayer);
+            currentLayer = styleName;
+            activeLayer = L.tileLayer(tileLayers[currentLayer].url, {
+                attribution: tileLayers[currentLayer].attribution,
+                ...tileLayers[currentLayer].options
+            }).addTo(map);
+            
+            // Update active button
+            document.querySelectorAll('.style-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-style="${styleName}"]`).classList.add('active');
+        }
+    };"""
+    
+    js += """
     
     // Book data
     const booksData = """ + json.dumps(books_data, indent=4) + """;
@@ -416,9 +483,9 @@ def generate_map_js(books_data):
     return js
 
 
-def generate_html(books_data):
+def generate_html(books_data, preview_mode=False):
     """Generate the HTML file with embedded map"""
-    map_js = generate_map_js(books_data)
+    map_js = generate_map_js(books_data, include_style_switcher=preview_mode)
     
     # Read CSS if it exists
     css_content = ""
@@ -605,11 +672,94 @@ def generate_html(books_data):
             content: '↙';
         }}
         
-        {css_content}
+        {css_content}"""
+    
+    # Add preview-specific styles
+    if preview_mode:
+        html += """
+        
+        /* Style chooser panel (preview mode only) */
+        .style-chooser {{
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            max-width: 250px;
+        }}
+        
+        .style-chooser h3 {{
+            margin: 0 0 10px 0;
+            font-size: 16px;
+            color: #333;
+        }}
+        
+        .style-chooser .note {{
+            font-size: 11px;
+            color: #888;
+            margin-bottom: 15px;
+            font-style: italic;
+        }}
+        
+        .style-grid {{
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }}
+        
+        .style-btn {{
+            padding: 10px;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+            text-align: center;
+        }}
+        
+        .style-btn:hover {{
+            border-color: #007bff;
+            background: #f8f9fa;
+        }}
+        
+        .style-btn.active {{
+            border-color: #007bff;
+            background: #007bff;
+            color: white;
+            font-weight: bold;
+        }}"""
+    
+    html += """
     </style>
 </head>
 <body>
-    <div id="map"></div>
+    <div id="map"></div>"""
+    
+    # Add style chooser panel in preview mode
+    if preview_mode:
+        html += """
+    
+    <!-- Style Chooser (preview mode only) -->
+    <div class="style-chooser">
+        <h3>Map Styles</h3>
+        <p class="note">Preview only - not included in production</p>
+        <div class="style-grid">
+            <button class="style-btn active" data-style="positron" onclick="switchStyle('positron')">Positron</button>
+            <button class="style-btn" data-style="voyager" onclick="switchStyle('voyager')">Voyager</button>
+            <button class="style-btn" data-style="dark" onclick="switchStyle('dark')">Dark Matter</button>
+            <button class="style-btn" data-style="osm" onclick="switchStyle('osm')">OSM</button>
+            <button class="style-btn" data-style="humanitarian" onclick="switchStyle('humanitarian')">Humanitarian</button>
+            <button class="style-btn" data-style="terrain" onclick="switchStyle('terrain')">Terrain</button>
+            <button class="style-btn" data-style="toner" onclick="switchStyle('toner')">Toner</button>
+            <button class="style-btn" data-style="watercolor" onclick="switchStyle('watercolor')">Watercolor</button>
+        </div>
+    </div>"""
+    
+    html += """
     
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -677,21 +827,25 @@ def main():
     save_cache(cache)
     print(f"Cached {len(cache)} locations")
     
-    # Generate HTML
-    print("Generating HTML...")
-    html = generate_html(processed_books)
-    
     # Create output directory
     output_path = Path(OUTPUT_DIR)
     output_path.mkdir(parents=True, exist_ok=True)
     
-    # Write HTML file
+    # Generate production HTML (clean, no style chooser)
+    print("Generating production HTML...")
+    html_production = generate_html(processed_books, preview_mode=False)
     output_file = output_path / "index.html"
     with open(output_file, 'w') as f:
-        f.write(html)
+        f.write(html_production)
+    print(f"✓ Generated {output_file} (production)")
     
-    print(f"✓ Generated {output_file}")
-    print(f"✓ Map contains {len(processed_books)} books")
+    # Generate preview HTML (with style chooser)
+    print("Generating preview HTML...")
+    html_preview = generate_html(processed_books, preview_mode=True)
+    preview_file = output_path / "preview.html"
+    with open(preview_file, 'w') as f:
+        f.write(html_preview)
+    print(f"✓ Generated {preview_file} (with style chooser)")
     
     # Summary statistics
     total_locations = sum(len(book['locations']) for book in processed_books)
@@ -705,8 +859,9 @@ def main():
     print(f"   - Books with reviews: {books_with_reviews}")
     
     print("\nNext steps:")
-    print(f"  1. Open {output_file} in a browser to preview")
-    print("  2. Upload the output folder to your hosting/Squarespace")
+    print(f"  1. Open {preview_file} to test styles")
+    print(f"  2. Open {output_file} to see production version")
+    print("  3. Upload index.html to Squarespace (clean, no style chooser)")
 
 
 if __name__ == "__main__":

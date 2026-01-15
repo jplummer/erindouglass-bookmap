@@ -29,30 +29,37 @@ This will:
 - Read `books.yaml`
 - Geocode any locations that don't have coordinates
 - Cache geocoding results for future builds
-- Generate `output/index.html`
+- Generate **two HTML files**:
+  - `output/index.html` - Clean production version (for Squarespace)
+  - `output/preview.html` - Preview with style chooser panel
 
-### 4. Preview
+### 4. Preview & Test Styles
 
 **Before embedding in Squarespace, preview the map locally:**
 
-**Option 1: Open directly in browser**
+**To test different map styles:**
+```bash
+open output/preview.html
+```
+This opens the preview version with a style chooser panel in the top-right corner. Try out 8 different map styles:
+- CartoDB: Positron (default), Voyager, Dark Matter
+- OpenStreetMap: Standard, Humanitarian
+- Stamen: Terrain, Toner, Watercolor
+
+**To preview the production version (what users will see):**
 ```bash
 open output/index.html
 ```
-Or double-click `output/index.html` in Finder.
+This is the clean version with no style chooser (identical to what will appear on Squarespace).
 
-**Option 2: Use Python's built-in server (recommended)**
+**Using a local server (recommended for testing):**
 ```bash
 cd output
 python3 -m http.server 8000
 ```
-Then open `http://localhost:8000` in your browser.
-
-**Option 3: Use any local web server**
-- VS Code: Right-click `output/index.html` → "Open with Live Server"
-- Or use any other local development server
-
-The map will work exactly as it will on Squarespace, so you can test everything before uploading.
+Then open:
+- `http://localhost:8000/preview.html` - test styles
+- `http://localhost:8000/index.html` - see production version
 
 ### 5. Deploy
 
@@ -190,10 +197,12 @@ If you know the exact coordinates, you can include them to skip geocoding:
 
 - ✅ Easy YAML input format
 - ✅ Automatic geocoding (or use manual coordinates)
-- ✅ Marker clustering for duplicate locations
+- ✅ Individual pins with smart offset for duplicate locations
+- ✅ Off-screen indicators showing count and direction of hidden pins
 - ✅ Book covers and review links in popups
 - ✅ Static HTML output (no server needed)
-- ✅ OpenStreetMap tiles (free, no API key)
+- ✅ 8 map styles to choose from (Positron, Voyager, Dark Matter, OSM, Humanitarian, Terrain, Toner, Watercolor)
+- ✅ Dual output: clean production file + preview with style chooser
 - ✅ Responsive design
 
 ---

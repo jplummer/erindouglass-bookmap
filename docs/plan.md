@@ -16,9 +16,12 @@
 Build a static, interactive map showing where reviewed books are set, with:
 - YAML input file for easy editing
 - Python build script for generation
-- Leaflet.js with marker clustering
-- CartoDB Positron tiles (light, minimal style)
-- Auto-zoom to show all markers
+- Leaflet.js for interactive mapping
+- Individual pins with smart offset for duplicates
+- Off-screen indicators showing hidden pins
+- 8 map style options (CartoDB, OSM, Stamen)
+- Default zoom level 3 (continent view)
+- Dual output: production + preview with style chooser
 - Static HTML output
 
 ---
@@ -31,7 +34,8 @@ erindouglass-bookmap/
 ├── build.py                # Build script
 ├── requirements.txt        # Python dependencies
 ├── output/
-│   └── index.html          # Generated static map (self-contained)
+│   ├── index.html          # Production: clean, for Squarespace
+│   └── preview.html        # Preview: with style chooser panel
 ├── cache/
 │   └── geocoding.json      # Cached coordinates (auto-generated)
 ├── docs/                   # Plan and how-to
@@ -118,9 +122,13 @@ erindouglass-bookmap/
 - [x] User can add a book by editing YAML file
 - [x] Build script runs without errors (with valid YAML)
 - [x] Generated map displays books correctly
-- [x] Clustering works for duplicate locations
+- [x] Individual pins with smart offset for duplicate locations
+- [x] Off-screen indicators show hidden pins
 - [x] Popups show book information correctly
 - [x] YAML validation catches common errors
+- [x] Multiple map styles available for testing (8 options)
+- [x] Dual output: clean production + preview with style chooser
+- [x] Production HTML has zero unused code
 - [ ] Map embeds successfully in Squarespace (instructions provided, not yet verified)
 - [x] Documentation is clear and complete
 - [x] Format documentation included in books.yaml for easy reference
