@@ -11,6 +11,10 @@ import time
 import sys
 import re
 from pathlib import Path
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 from geopy.geocoders import Nominatim
 from geopy.exc import GeocoderTimedOut, GeocoderServiceError
 
@@ -238,7 +242,8 @@ def generate_map_js(books_data, include_style_switcher=False, default_style='pos
     """Generate JavaScript code to initialize the map"""
     
     # API key only in preview mode, rely on domain restrictions in production
-    api_key_param = '?api_key=ff662e52-c0eb-488e-97fc-150a421dc3e0' if include_style_switcher else ''
+    api_key = os.getenv('STADIA_API_KEY', '')
+    api_key_param = f'?api_key={api_key}' if (include_style_switcher and api_key) else ''
     
     js = """
     // Initialize map (temporary view, will be adjusted to fit markers)
@@ -305,7 +310,26 @@ def generate_map_js(books_data, include_style_switcher=False, default_style='pos
             url: 'https://tiles.stadiamaps.com/tiles/outdoors/{z}/{x}/{y}{r}.png""" + api_key_param + """',
             attribution: '&copy; <a href="https://stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
             options: { maxZoom: 20 }
+        },
+        'opentopomap': {
+            url: 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a>',
+            options: { maxZoom: 17 }
+        },
+        'cyclosm': {
+            url: 'https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png',
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Map style: &copy; <a href="https://www.cyclosm.org">CyclOSM</a>',
+            options: { maxZoom: 20 }
+        },
+        'esri_world': {
+            url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+            attribution: '&copy; <a href="https://www.esri.com/">Esri</a>, Maxar, Earthstar Geographics, and the GIS User Community',
+            options: { maxZoom: 19 }
         }
+        // Additional providers (require API keys):
+        // Mapbox: https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}
+        // Thunderforest: https://{s}.tile.thunderforest.com/{style}/{z}/{x}/{y}.png?apikey={apikey}
+        // Maptiler: https://api.maptiler.com/maps/{style}/256/{z}/{x}/{y}.png?key={key}
     };
     
     // Start with configured default style
@@ -705,42 +729,42 @@ def generate_html(books_data, preview_mode=False, default_style='positron'):
         /* Style chooser panel (preview mode only) */
         .style-chooser {
             position: fixed;
-            top: 20px;
-            right: 20px;
+            top: 10px;
+            right: 10px;
             background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            padding: 12px;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
             z-index: 1000;
-            max-width: 250px;
+            max-width: 300px;
         }
         
         .style-chooser h3 {
-            margin: 0 0 10px 0;
-            font-size: 16px;
+            margin: 0 0 6px 0;
+            font-size: 14px;
             color: #333;
         }
         
         .style-chooser .note {
-            font-size: 11px;
+            font-size: 10px;
             color: #888;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             font-style: italic;
         }
         
         .style-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 5px;
         }
         
         .style-btn {
-            padding: 10px;
-            border: 2px solid #ddd;
+            padding: 6px 4px;
+            border: 1px solid #ddd;
             background: white;
-            border-radius: 4px;
+            border-radius: 3px;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 10px;
             transition: all 0.2s;
             text-align: center;
         }
@@ -778,7 +802,10 @@ def generate_html(books_data, preview_mode=False, default_style='positron'):
             ('alidade_smooth', 'Alidade Smooth'),
             ('alidade_smooth_dark', 'Alidade Dark'),
             ('osm_bright', 'OSM Bright'),
-            ('outdoors', 'Outdoors')
+            ('outdoors', 'Outdoors'),
+            ('opentopomap', 'OpenTopoMap'),
+            ('cyclosm', 'CyclOSM'),
+            ('esri_world', 'Satellite')
         ]
         
         buttons_html = ""

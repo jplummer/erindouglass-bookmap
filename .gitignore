@@ -15,6 +15,9 @@ cache/
 # Output
 output/
 
+# Environment variables
+.env
+
 # IDE
 .vscode/
 .idea/
