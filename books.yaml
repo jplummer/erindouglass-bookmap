@@ -8,6 +8,8 @@ books:
   - name: Sahara Desert
   review: https://www.csmonitor.com/Books/Author-Q-As/2025/0926/super-natural-alex-riley
   genre: Science
+  year: 2025
+  cover: https://covers.openlibrary.org/b/isbn/9781324079187-L.jpg
 - title: Monopoly X
   author: Philip E. Orbanes
   isbn: '9780063425132'
@@ -15,6 +17,8 @@ books:
   - name: Germany
   review: https://www.csmonitor.com/Books/Author-Q-As/2025/0725/monopoly-x-philip-orbanes-world-war-2
   genre: History
+  year: 2025
+  cover: https://covers.openlibrary.org/b/isbn/9780063425132-L.jpg
 - title: The Rarest Fruit
   author: Gaëlle Bélem
   isbn: '9798889660996'
@@ -22,6 +26,8 @@ books:
   - name: Réunion Island
   review: https://www.csmonitor.com/Books/Book-Reviews/2025/0710/black-botanist-edmond-albius-19th-century
   genre: Historical Fiction
+  year: 2025
+  cover: https://covers.openlibrary.org/b/isbn/9798889660996-L.jpg
 - title: Amity
   author: Nathan Harris
   isbn: '9780316456241'
@@ -30,6 +36,8 @@ books:
   - name: Mexico
   review: https://www.csmonitor.com/Books/Book-Reviews/2025/1126/black-western-amity-nathan-harris
   genre: Historical Fiction
+  year: 2025
+  cover: https://covers.openlibrary.org/b/isbn/9780316456241-L.jpg
 - title: Cloud Cuckoo Land
   author: Anthony Doerr
   isbn: '9781982168438'
@@ -38,6 +46,8 @@ books:
   - name: Idaho, USA
   review: https://www.csmonitor.com/Books/Book-Reviews/2021/0928/Cosmic-puzzle-pieces-come-together-in-masterly-Cloud-Cuckoo-Land
   genre: Historical Fiction
+  year: 2021
+  cover: https://covers.openlibrary.org/b/isbn/9781982168438-L.jpg
 - title: Properties of Thirst
   author: Marianne Wiggins
   isbn: '9781416571261'
@@ -45,6 +55,8 @@ books:
   - name: California, USA
   review: https://www.csmonitor.com/Books/Book-Reviews/2022/1013/Manzanar-camp-novel-explores-moral-culpability-during-World-War-II
   genre: Historical Fiction
+  year: 2022
+  cover: https://covers.openlibrary.org/b/isbn/9781416571261-L.jpg
 - title: The Rose Code
   author: Kate Quinn
   isbn: '9780063059412'
@@ -52,6 +64,8 @@ books:
   - name: Bletchley Park, England
   review: https://www.csmonitor.com/Books/Book-Reviews/2021/0825/Life-in-wartime-Women-dominate-a-quartet-of-World-War-II-novels
   genre: Historical Fiction
+  year: 2021
+  cover: https://covers.openlibrary.org/b/isbn/9780063059412-L.jpg
 - title: The Forest of Vanishing Stars
   author: Kristin Harmel
   isbn: '9781982158934'
@@ -61,6 +75,8 @@ books:
     lng: 26.4425
   review: https://www.csmonitor.com/Books/Book-Reviews/2021/0825/Life-in-wartime-Women-dominate-a-quartet-of-World-War-II-novels
   genre: Historical Fiction
+  year: 2021
+  cover: https://covers.openlibrary.org/b/isbn/9781982158934-L.jpg
 - title: The Woman With the Blue Star
   author: Pam Jenoff
   isbn: '9780778311546'
@@ -68,6 +84,8 @@ books:
   - name: Kraków, Poland
   review: https://www.csmonitor.com/Books/Book-Reviews/2021/0825/Life-in-wartime-Women-dominate-a-quartet-of-World-War-II-novels
   genre: Historical Fiction
+  year: 2021
+  cover: https://covers.openlibrary.org/b/isbn/9780778311546-L.jpg
 - title: The Riviera House
   author: Natasha Lester
   isbn: '9781538717318'
@@ -76,6 +94,8 @@ books:
   - name: French Riviera, France
   review: https://www.csmonitor.com/Books/Book-Reviews/2021/0825/Life-in-wartime-Women-dominate-a-quartet-of-World-War-II-novels
   genre: Historical Fiction
+  year: 2021
+  cover: https://covers.openlibrary.org/b/isbn/9781538717318-L.jpg
 - title: Endling
   author: Maria Reva
   isbn: '9780385545310'
@@ -83,6 +103,8 @@ books:
   - name: Ukraine
   review: https://www.csmonitor.com/Books/Book-Reviews/2025/0605/endling-debut-novel-maria-reva
   genre: Fiction
+  year: 2025
+  cover: https://covers.openlibrary.org/b/isbn/9780385545310-L.jpg
 - title: The Art Spy
   author: Michelle Young
   isbn: '9780063295896'
@@ -90,6 +112,8 @@ books:
   - name: Paris, France
   review: https://www.csmonitor.com/Books/Author-Q-As/2025/0529/michelle-young-the-art-spy-second-world-war
   genre: Biography
+  year: 2025
+  cover: https://covers.openlibrary.org/b/isbn/9780063295896-L.jpg
 - title: The Dream Hotel
   author: Laila Lalami
   isbn: '9780593317600'
@@ -97,6 +121,8 @@ books:
   - name: United States
   review: https://www.csmonitor.com/Books/Author-Q-As/2025/0314/laila-lalami-the-dream-hotel
   genre: Fiction
+  year: 2025
+  cover: https://covers.openlibrary.org/b/isbn/9780593317600-L.jpg
 - title: 'Ingenious: A Biography of Benjamin Franklin, Scientist'
   author: Richard Munson
   isbn: '9780393882230'
@@ -104,6 +130,8 @@ books:
   - name: Philadelphia, Pennsylvania, USA
   review: https://www.csmonitor.com/Books/Author-Q-As/2025/0110/richard-munson-ingenious-benjamin-franklin
   genre: Biography
+  year: 2024
+  cover: https://covers.openlibrary.org/b/isbn/9780393882230-L.jpg
 - title: Polostan
   author: Neal Stephenson
   isbn: '9780062334497'
@@ -112,6 +140,8 @@ books:
   - name: Montana, USA
   review: https://www.csmonitor.com/Books/Author-Q-As/2024/1205/neal-stephenson-polostan-novel
   genre: Historical Fiction
+  year: 2024
+  cover: https://covers.openlibrary.org/b/isbn/9780062334497-L.jpg
 - title: 'Frederick Douglass: A Novel'
   author: Sidney Morrison
   isbn: '9780998825793'
@@ -119,6 +149,8 @@ books:
   - name: United States
   review: https://www.csmonitor.com/Books/Book-Reviews/2024/0731/frederick-douglass-novel-sidney-morrison
   genre: Historical Fiction
+  year: 2024
+  cover: https://covers.openlibrary.org/b/isbn/9780998825793-L.jpg
 - title: The General and Julia
   author: Jon Clinch
   isbn: '9781668009789'
@@ -126,6 +158,8 @@ books:
   - name: United States
   review: https://www.csmonitor.com/Books/2024/0103/A-novelist-envisions-the-last-days-of-Ulysses-S.-Grant
   genre: Historical Fiction
+  year: 2023
+  cover: https://covers.openlibrary.org/b/isbn/9781668009789-L.jpg
 - title: The Heaven & Earth Grocery Store
   author: James McBride
   isbn: '9780593422946'
@@ -133,6 +167,8 @@ books:
   - name: Pennsylvania, USA
   review: https://www.csmonitor.com/Books/Book-Reviews/2023/1012/The-Heaven-Earth-Grocery-Store-weaves-a-tale-of-love-and-community
   genre: Fiction
+  year: 2023
+  cover: https://covers.openlibrary.org/b/isbn/9780593422946-L.jpg
 - title: Daughter of the Dragon
   author: Yunte Huang
   isbn: '9781631495809'
@@ -141,6 +177,8 @@ books:
   - name: Hollywood, California, USA
   review: https://www.csmonitor.com/Books/Book-Reviews/2023/1012/Anna-May-Wong-blazed-a-trail-for-Asian-actors-in-Hollywood
   genre: Biography
+  year: 2023
+  cover: https://covers.openlibrary.org/b/isbn/9781631495809-L.jpg
 - title: Parallel Lines
   author: Ruth Marks Eglash
   isbn: '9781685132163'
@@ -148,6 +186,8 @@ books:
   - name: Jerusalem, Israel
   review: https://www.csmonitor.com/Books/Author-Q-As/2023/0921/To-explain-Jerusalem-s-conflicts-she-wrote-a-young-adult-novel
   genre: Young Adult Fiction
+  year: 2023
+  cover: https://covers.openlibrary.org/b/isbn/9781685132163-L.jpg
 - title: The Last Dance
   author: Mark Billingham
   isbn: '9780802161949'
@@ -155,6 +195,8 @@ books:
   - name: United Kingdom
   review: https://www.csmonitor.com/Books/Book-Reviews/2023/0811/Two-to-tango-Mark-Billingham-mystery-explores-partnership
   genre: Mystery
+  year: 2023
+  cover: https://covers.openlibrary.org/b/isbn/9780802161949-L.jpg
 - title: The Covenant of Water
   author: Abraham Verghese
   isbn: '9780802162175'
@@ -162,6 +204,8 @@ books:
   - name: Kerala, India
   review: https://www.csmonitor.com/Books/2023/0717/In-a-land-shaped-by-water-a-family-tale-of-persistence
   genre: Fiction
+  year: 2023
+  cover: https://covers.openlibrary.org/b/isbn/9780802162175-L.jpg
 - title: Birnam Wood
   author: Eleanor Catton
   isbn: '9780374110338'
@@ -169,6 +213,8 @@ books:
   - name: New Zealand
   review: https://www.csmonitor.com/Books/2023/0607/Eleanor-Catton-talks-about-Birnam-Wood-and-the-seduction-of-certainty
   genre: Fiction
+  year: 2023
+  cover: https://covers.openlibrary.org/b/isbn/9780374110338-L.jpg
 - title: Getting out of Saigon
   author: Ralph White
   isbn: '9781982195175'
@@ -176,6 +222,8 @@ books:
   - name: Ho Chi Minh City, Vietnam
   review: https://www.csmonitor.com/Books/Author-Q-As/2023/0517/A-daring-escape-How-an-American-banker-rescued-113-Vietnamese-civilians
   genre: Memoir
+  year: 2023
+  cover: https://covers.openlibrary.org/b/isbn/9781982195175-L.jpg
 - title: Cold People
   author: Tom Rob Smith
   isbn: '9781982198404'
@@ -183,6 +231,8 @@ books:
   - name: Antarctica
   review: https://www.csmonitor.com/Books/Book-Reviews/2023/0410/Sci-fi-novel-Cold-People-explores-ethics-of-human-bioengineering
   genre: Science Fiction
+  year: 2023
+  cover: https://covers.openlibrary.org/b/isbn/9781982198404-L.jpg
 - title: Roses, in the Mouth of a Lion
   author: Bushra Rehman
   isbn: '9781250834782'
@@ -190,6 +240,8 @@ books:
   - name: Queens, New York, USA
   review: https://www.csmonitor.com/Books/Book-Reviews/2023/0221/Coming-of-age-novel-overflows-with-humor-heartache-and-honesty
   genre: Fiction
+  year: 2022
+  cover: https://covers.openlibrary.org/b/isbn/9781250834782-L.jpg
 - title: Master Slave Husband Wife
   author: Ilyon Woo
   isbn: '9781501191060'
@@ -197,6 +249,8 @@ books:
   - name: Georgia, USA
   review: https://www.csmonitor.com/Books/Author-Q-As/2023/0213/A-daring-escape-from-slavery-and-the-love-story-behind-it
   genre: History
+  year: 2024
+  cover: https://covers.openlibrary.org/b/isbn/9781501191060-L.jpg
 - title: The Consequences
   author: Manuel Muñoz
   isbn: '9781644452066'
@@ -205,6 +259,8 @@ books:
   - name: Mexico
   review: https://www.csmonitor.com/Books/Book-Reviews/2023/0105/The-uneasy-inbetweenness-of-lives-that-cross-borders
   genre: Short Stories
+  year: 2022
+  cover: https://covers.openlibrary.org/b/isbn/9781644452066-L.jpg
 - title: Blackwater Falls
   author: Ausma Zehanat Khan
   isbn: '9781250822383'
@@ -212,6 +268,8 @@ books:
   - name: Colorado, USA
   review: https://www.csmonitor.com/Books/2022/1215/Blackwater-Falls-is-a-whodunit-that-goes-below-the-surface
   genre: Mystery
+  year: 2022
+  cover: https://covers.openlibrary.org/b/isbn/9781250822383-L.jpg
 - title: Lessons
   author: Ian McEwan
   isbn: '9780593535202'
@@ -219,6 +277,8 @@ books:
   - name: United Kingdom
   review: https://www.csmonitor.com/Books/Book-Reviews/2022/1122/Ian-McEwan-s-Lessons-explores-complex-emotional-terrain
   genre: Fiction
+  year: 2022
+  cover: https://covers.openlibrary.org/b/isbn/9780593535202-L.jpg
 - title: The Wall
   author: Marlen Haushofer
   isbn: '9780811231947'
@@ -226,6 +286,8 @@ books:
   - name: Bavaria, Germany
   review: https://www.csmonitor.com/Books/Book-Reviews/2022/0727/Survival-tale-The-Wall-pits-a-woman-against-strange-forces
   genre: Fiction
+  year: 2022
+  cover: https://covers.openlibrary.org/b/isbn/9780811231947-L.jpg
 - title: Iona Iverson's Rules for Commuting
   author: Clare Pooley
   isbn: '9781984878649'
@@ -233,6 +295,8 @@ books:
   - name: London, England
   review: https://www.csmonitor.com/Books/Book-Reviews/2022/0606/Facades-are-dropped-and-judgments-suspended-on-a-commuter-train
   genre: Fiction
+  year: 2022
+  cover: https://covers.openlibrary.org/b/isbn/9781984878649-L.jpg
 - title: The Great Passion
   author: James Runcie
   isbn: '9781635570670'
@@ -240,13 +304,18 @@ books:
   - name: Leipzig, Germany
   review: https://www.csmonitor.com/Books/Book-Reviews/2022/0429/A-novel-envisions-what-it-would-be-like-to-study-with-Bach
   genre: Historical Fiction
+  year: 2022
+  cover: https://covers.openlibrary.org/b/isbn/9781635570670-L.jpg
 - title: Lessons in Chemistry
   author: Bonnie Garmus
   isbn: '9780385547345'
   locations:
   - name: United States
+  - name: Southern California
   review: https://www.csmonitor.com/Books/2022/0408/Lessons-in-Chemistry-catalyzes-science-cooking-and-humor
   genre: Fiction
+  year: 2022
+  cover: https://covers.openlibrary.org/b/isbn/9780385547345-L.jpg
 - title: Our American Friend
   author: Anna Pitoniak
   isbn: '9781982158965'
@@ -255,6 +324,8 @@ books:
   - name: Russia
   review: https://www.csmonitor.com/Books/Book-Reviews/2022/0328/Whispers-lies-and-coercion-fail-to-vanquish-truth
   genre: Thriller
+  year: 2023
+  cover: https://covers.openlibrary.org/b/isbn/9781982158965-L.jpg
 - title: Thank You, Mr. Nixon
   author: Gish Jen
   isbn: '9780593319895'
@@ -263,6 +334,8 @@ books:
   - name: China
   review: https://www.csmonitor.com/Books/Book-Reviews/2022/0204/Thank-You-Mr.-Nixon-and-other-tales-of-the-Chinese-diaspora
   genre: Short Stories
+  year: 2022
+  cover: https://covers.openlibrary.org/b/isbn/9780593319895-L.jpg
 - title: State of Terror
   author: Hillary Rodham Clinton and Louise Penny
   isbn: '9781982173678'
@@ -270,6 +343,8 @@ books:
   - name: United States
   review: https://www.csmonitor.com/Books/Book-Reviews/2021/1110/Clinton-and-Penny-s-State-of-Terror-catapults-a-powerful-woman-into-risk-taking
   genre: Thriller
+  year: 2021
+  cover: https://covers.openlibrary.org/b/isbn/9781982173678-L.jpg
 - title: Emily's House
   author: Amy Belding Brown
   isbn: '9780593199633'
@@ -277,13 +352,19 @@ books:
   - name: Amherst, Massachusetts, USA
   review: https://www.csmonitor.com/Books/Book-Reviews/2021/1012/In-the-novel-Emily-s-House-the-Dickinsons-Irish-maid-speaks-her-mind
   genre: Historical Fiction
+  year: 2021
+  cover: https://covers.openlibrary.org/b/isbn/9780593199633-L.jpg
 - title: The Lincoln Highway
   author: Amor Towles
   isbn: '9780735222359'
   locations:
   - name: United States
+  - name: Nebraska
+  - name: New York City
   review: https://www.csmonitor.com/Books/2021/1005/Amor-Towles-creates-an-American-road-trip-of-epic-proportions
   genre: Fiction
+  year: 2021
+  cover: https://covers.openlibrary.org/b/isbn/9780735222359-L.jpg
 - title: All the Lonely People
   author: Mike Gayle
   isbn: '9781538720165'
@@ -291,6 +372,8 @@ books:
   - name: England
   review: https://www.csmonitor.com/Books/Book-Reviews/2021/0921/Warmhearted-All-the-Lonely-People-strikes-at-isolation
   genre: Fiction
+  year: 2021
+  cover: https://covers.openlibrary.org/b/isbn/9781538720165-L.jpg
 - title: Early Morning Riser
   author: Katherine Heiny
   isbn: '9780525659341'
@@ -298,6 +381,8 @@ books:
   - name: Boyne City, Michigan, USA
   review: https://www.csmonitor.com/Books/Book-Reviews/2021/0621/Romantic-entanglements-bring-humor-and-heartache-to-small-town
   genre: Fiction
+  year: 2021
+  cover: https://covers.openlibrary.org/b/isbn/9780525659341-L.jpg
 - title: The Phone Booth at the Edge of the World
   author: Laura Imai Messina
   isbn: '9781419754302'
@@ -305,6 +390,8 @@ books:
   - name: Japan
   review: https://www.csmonitor.com/Books/Book-Reviews/2021/0309/Japan-tsunami-aftermath-provides-the-setting-for-this-quiet-wise-novel
   genre: Fiction
+  year: 2021
+  cover: https://covers.openlibrary.org/b/isbn/9781419754302-L.jpg
 - title: When Women Were Dragons
   author: Kelly Barnhill
   isbn: '9780385548229'
@@ -312,6 +399,8 @@ books:
   - name: United States
   review: https://www.csmonitor.com/Books/Book-Reviews/2022/0616/When-Women-Were-Dragons-imagines-a-fiery-response-to-female-suppression
   genre: Fantasy
+  year: 2022
+  cover: https://covers.openlibrary.org/b/isbn/9780385548229-L.jpg
 - title: I Must Betray You
   author: Ruta Sepetys
   isbn: '9781984836038'
@@ -319,3 +408,5 @@ books:
   - name: Romania
   review: https://www.csmonitor.com/Books/Book-Reviews/2022/0328/Whispers-lies-and-coercion-fail-to-vanquish-truth
   genre: Historical Fiction
+  year: 2022
+  cover: https://covers.openlibrary.org/b/isbn/9781984836038-L.jpg

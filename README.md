@@ -87,7 +87,7 @@ Use `output/preview.html` to test different combinations visually. Once you've c
 
 ### Auto-fill Book Metadata
 
-Use `enrich_books.py` to fetch missing metadata (year, genre, etc.) from Google Books API:
+Use `enrich_books.py` to fetch missing metadata (year, genre, cover, etc.) from Google Books API:
 
 ```bash
 python3 enrich_books.py --dry-run  # preview changes
@@ -96,6 +96,24 @@ python3 enrich_books.py --yes      # auto-approve all
 ```
 
 Requires ISBNs in `books.yaml` for best results.
+
+### Lookup Book Locations from Wikipedia
+
+Add the `--locations` flag to also search Wikipedia for more specific setting information:
+
+```bash
+python3 enrich_books.py --locations --dry-run  # preview location suggestions
+python3 enrich_books.py --locations --yes      # auto-approve all
+```
+
+This will:
+- Search Wikipedia articles for books that only have generic locations (e.g., "United States")
+- Extract specific setting details from article text (e.g., "1960s Southern California")
+- Suggest adding these more specific locations to your data
+
+Options:
+- `--all-locations` - Check all books, not just those with generic locations
+- `--book-title "Title"` - Test with a specific book
 
 ---
 
